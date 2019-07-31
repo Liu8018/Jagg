@@ -1,0 +1,24 @@
+<xml>
+
+    <site>
+        <name>北理工教务处通知</name>
+        <url>http://jwc.bit.edu.cn/tzgg/index.htm</url>
+    </site>
+
+    <site>
+        <name>豆瓣书评</name>
+        <url>https://book.douban.com/review/latest/?app_name=book</url>
+
+        <title></title>
+        <abstract></abstract>
+        <date></date>
+        <image></image>
+
+        <nextPage></nextPage>
+        <prePage></prePage>
+
+    </site>
+
+
+
+</xml>
