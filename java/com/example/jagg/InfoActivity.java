@@ -14,6 +14,8 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
 
+        WebTool webTool = new WebTool();
+
         Button button_2web = (Button)findViewById(R.id.button_2web);
         button_2web.setOnClickListener(new View.OnClickListener() {
             @Override

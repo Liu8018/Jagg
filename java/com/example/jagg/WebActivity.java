@@ -36,7 +36,10 @@ public class WebActivity extends AppCompatActivity {
                return true;
            }
         });
-        webView.loadUrl("https://blog.csdn.net");
+
+        //webView.loadUrl("");
+        webView.loadUrl("http://www.qiushibaike.com/8hr/page/1/");//糗事百科
+        //webView.loadUrl("http://jwc.bit.edu.cn/tzgg/index.htm");//北理工教务处通知
 
         webView.setWebChromeClient(webChromeClient);
         webView.setWebViewClient(webViewClient);
