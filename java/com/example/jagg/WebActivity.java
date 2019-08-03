@@ -3,6 +3,7 @@ package com.example.jagg;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,13 +38,12 @@ public class WebActivity extends AppCompatActivity {
            }
         });
 
-        //webView.loadUrl("");
-        webView.loadUrl("http://www.qiushibaike.com/8hr/page/1/");//糗事百科
-        //webView.loadUrl("http://jwc.bit.edu.cn/tzgg/index.htm");//北理工教务处通知
+        Intent intent = getIntent();
+        String dUrl = intent.getStringExtra("detailUrl");
+        webView.loadUrl(dUrl);
 
         webView.setWebChromeClient(webChromeClient);
         webView.setWebViewClient(webViewClient);
-
 
     }
 

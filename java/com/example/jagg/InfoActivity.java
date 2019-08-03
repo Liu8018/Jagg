@@ -17,8 +17,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,10 +41,8 @@ public class InfoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 InfoElement infoElem = infoElems.get(position);
 
-                Toast.makeText(InfoActivity.this, infoElem.dUrl,
-                        Toast.LENGTH_SHORT).show();
-
                 Intent intent = new Intent(InfoActivity.this, WebActivity.class);
+                intent.putExtra("detailUrl",infoElem.dUrl);
                 startActivity(intent);
             }
         });
