@@ -1,5 +1,6 @@
 package com.example.jagg;
 
+import android.icu.text.IDNA;
 import android.util.Log;
 
 import org.jsoup.Jsoup;
@@ -8,6 +9,12 @@ import org.jsoup.select.Elements;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+class InfoElement {
+    String info;
+    String date;
+    String dUrl;
+}
 
 class funcs {
     public static String getTrueUrlPath(String siteUrl, String subUrl) {
@@ -26,8 +33,6 @@ class funcs {
                 resList[i-1] = false;
             }
 
-            //Log.i("test urlsec",urlList[i]);
-            //Log.i("res",resList[i]+"");
         }
 
         url = "";
@@ -50,6 +55,8 @@ class Site_jwc {
     private String url = "http://jwc.bit.edu.cn/tzgg/index{i}.htm";
     public String[] pageUrls = new String[npages];
 
+    public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+
     Site_jwc() {
         pageUrls[0] = url.replace("{i}","");
         for(int i=1;i<npages;i++) {
@@ -57,10 +64,11 @@ class Site_jwc {
         }
     }
 
-    public String[] getInfos(int pageId) {
+    public void getInfos(int pageId) {
+        infos.clear();
         final String pageUrl = pageUrls[pageId];
 
-        new Thread() {
+        Thread th = new Thread() {
             @Override
             public void run() {
                 super.run();
@@ -74,22 +82,30 @@ class Site_jwc {
                     String[] str_tls = new String[tls.size()];
                     for(int i=0;i<tls.size();i++) {
                         str_tls[i] = tls.get(i).text();
-                        //Log.i("tl", tls.get(i).text());
+                        //Log.i("tl", str_tls[i]);
                     }
 
                     Elements dts = els.select("span");
                     String[] str_dts = new String[dts.size()];
                     for(int i=0;i<dts.size();i++) {
                         str_dts[i] = dts.get(i).text();
-                        //Log.i("dt", dts.get(i).text());
+                        //Log.i("dt", str_dts[i]);
                     }
 
+                    String[] str_dus = new String[tls.size()];
                     for(int i=0;i<tls.size();i++) {
-                        String dus = tls.get(i).attr("href");
-                        //Log.i("dus", dus);
-                        //Log.i("dus2",funcs.getTrueUrlPath(pageUrl,dus));
+                        str_dus[i] = tls.get(i).attr("href");
+                        str_dus[i] = funcs.getTrueUrlPath(pageUrl,str_dus[i]);
+                        //Log.i("du",str_dus[i]);
+                    }
 
-                        
+                    for(int i=0;i<str_tls.length;i++) {
+                        InfoElement infoElem = new InfoElement();
+                        infoElem.info = str_tls[i];
+                        infoElem.date = str_dts[i];
+                        infoElem.dUrl = str_dus[i];
+
+                        infos.add(infoElem);
                     }
 
                 }
@@ -97,23 +113,34 @@ class Site_jwc {
                     Log.e("jsoup error","ioexception");
                 }
             }
-        }.start();
+        };
 
-        return pageUrls;
+        th.start();
+        try {
+            th.join();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }
 
 public class WebTool {
 
-    public Site_jwc jwc = new Site_jwc();
+    private Site_jwc jwc = new Site_jwc();
 
     WebTool() {
-        for(int i=0;i<jwc.npages;i++) {
-            Log.i("WebTool",jwc.pageUrls[i]);
-        }
 
-        jwc.getInfos(0);
     }
 
+    public ArrayList<InfoElement> getInfoList(String siteName, int pageId) {
+        jwc.getInfos(pageId);
 
+        ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+
+        if(siteName.equals("jwc"))
+            infos = jwc.infos;
+
+        return infos;
+    }
 }

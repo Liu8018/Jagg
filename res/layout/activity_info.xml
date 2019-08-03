@@ -7,11 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".InfoActivity">
 
-    <Button
-        android:id="@+id/button_2web"
+    <ListView
+        android:id="@+id/listView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="go to web page"/>
+        android:layout_height="match_parent" >
+    </ListView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
