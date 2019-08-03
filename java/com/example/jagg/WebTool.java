@@ -10,6 +10,25 @@ import org.jsoup.select.Elements;
 import java.io.IOException;
 import java.util.ArrayList;
 
+public class WebTool {
+    public ArrayList<InfoElement> getInfoList(String siteName, int pageId) {
+        ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+
+        if(siteName.equals("jwc")) {
+            Site_jwc jwc = new Site_jwc();
+            jwc.getInfos(pageId);
+            infos = jwc.infos;
+        }
+        else if(siteName.equals("qsbk")) {
+            Site_qsbk qsbk = new Site_qsbk();
+            qsbk.getInfos(pageId);
+            infos = qsbk.infos;
+        }
+
+        return infos;
+    }
+}
+
 class InfoElement {
     String info;
     String date;
@@ -53,6 +72,7 @@ class funcs {
 class Site_jwc {
     public int npages = 30;
     private String url = "http://jwc.bit.edu.cn/tzgg/index{i}.htm";
+    private String pageUrl;
     public String[] pageUrls = new String[npages];
 
     public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
@@ -66,7 +86,7 @@ class Site_jwc {
 
     public void getInfos(int pageId) {
         infos.clear();
-        final String pageUrl = pageUrls[pageId];
+        pageUrl = pageUrls[pageId];
 
         Thread th = new Thread() {
             @Override
@@ -125,22 +145,71 @@ class Site_jwc {
     }
 }
 
-public class WebTool {
+class Site_qsbk {
+    public int npages = 13;
+    public String[] pageUrls = new String[npages];
+    private String pageUrl;
 
-    private Site_jwc jwc = new Site_jwc();
+    public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
 
-    WebTool() {
-
+    Site_qsbk() {
+        for(int i=0;i<npages;i++) {
+            pageUrls[i] = "https://www.qiushibaike.com/8hr/page/" + (i+1);
+        }
     }
 
-    public ArrayList<InfoElement> getInfoList(String siteName, int pageId) {
-        jwc.getInfos(pageId);
+    public void getInfos(int pageId) {
+        infos.clear();
+        pageUrl = pageUrls[pageId];
 
-        ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+        Thread th = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                try {
+                    Document doc = Jsoup.connect(pageUrl).get();
 
-        if(siteName.equals("jwc"))
-            infos = jwc.infos;
+                    Elements els = doc.select("li[id]");
+                    //Log.i("element內容", "size:" + els.size() + "\n" + els.toString());
 
-        return infos;
+                    Elements tls = els.select("a.recmd-content");
+                    String[] str_tls = new String[tls.size()];
+                    for(int i=0;i<tls.size();i++) {
+                        str_tls[i] = tls.get(i).text();
+                        //Log.i("tl", str_tls[i]);
+                    }
+
+                    String[] str_dts = new String[tls.size()];
+
+                    String[] str_dus = new String[tls.size()];
+                    for(int i=0;i<tls.size();i++) {
+                        str_dus[i] = tls.get(i).attr("href");
+                        str_dus[i] = "https://www.qiushibaike.com" + str_dus[i];
+                        //Log.i("du",str_dus[i]);
+                    }
+
+                    for(int i=0;i<str_tls.length;i++) {
+                        InfoElement infoElem = new InfoElement();
+                        infoElem.info = str_tls[i];
+                        infoElem.date = str_dts[i];
+                        infoElem.dUrl = str_dus[i];
+
+                        infos.add(infoElem);
+                    }
+
+                }
+                catch (IOException e) {
+                    Log.e("jsoup error","ioexception");
+                }
+            }
+        };
+
+        th.start();
+        try {
+            th.join();
+        }
+        catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

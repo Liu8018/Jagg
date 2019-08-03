@@ -1,16 +1,60 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<GridLayout
+    android:id="@+id/mainPage_layout"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:columnCount="4"
+    android:rowCount="6">
 
-    <Button
-        android:id="@+id/button_2info"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        android:text="go to info page"/>
+    <RelativeLayout>
+        <ImageView
+            android:id="@+id/img_jwc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            android:src="@drawable/jwc"/>
+        <TextView
+            android:contentDescription="jwc"
+            android:id="@+id/text_jwc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_jwc"
+            android:layout_columnWeight="1"
+            android:layout_centerHorizontal="true"
+
+            android:text="教务处"/>
+    </RelativeLayout>
+
+    <RelativeLayout>
+        <ImageView
+            android:id="@+id/img_qsbk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/qsbk"/>
+        <TextView
+            android:contentDescription="qsbk"
+            android:id="@+id/text_qsbk"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_qsbk"
+            android:layout_columnWeight="1"
+            android:layout_centerHorizontal="true"
+
+            android:text="糗事百科"/>
+    </RelativeLayout>
+
+
+</GridLayout>

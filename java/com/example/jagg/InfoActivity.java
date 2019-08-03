@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InfoActivity extends AppCompatActivity {
+    private String siteName;
+    private int pageId;
 
     private WebTool webTool = new WebTool();
 
@@ -32,6 +34,11 @@ public class InfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
+
+        pageId = 0;
+
+        Intent intent = getIntent();
+        siteName = intent.getStringExtra("siteName");
 
         listView = (ListView) findViewById(R.id.listView);
         loadInfos();
@@ -49,7 +56,7 @@ public class InfoActivity extends AppCompatActivity {
     }
 
     private void loadInfos() {
-        infoElems = webTool.getInfoList("jwc",0);
+        infoElems = webTool.getInfoList(siteName,pageId);
 
         InfoElemAdapter adapter = new InfoElemAdapter(
                 InfoActivity.this, R.layout.info_element, infoElems);
