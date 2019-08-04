@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class WebTool {
+    int npages;
+
     public ArrayList<InfoElement> getInfoList(String siteName, int pageId) {
         ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
 
@@ -18,15 +20,18 @@ public class WebTool {
             Site_jwc jwc = new Site_jwc();
             jwc.getInfos(pageId);
             infos = jwc.infos;
+            npages = jwc.npages;
         }
         else if(siteName.equals("qsbk")) {
             Site_qsbk qsbk = new Site_qsbk();
             qsbk.getInfos(pageId);
             infos = qsbk.infos;
+            npages = qsbk.npages;
         }
 
         return infos;
     }
+
 }
 
 class InfoElement {
@@ -185,7 +190,7 @@ class Site_qsbk {
                     for(int i=0;i<tls.size();i++) {
                         str_dus[i] = tls.get(i).attr("href");
                         str_dus[i] = "https://www.qiushibaike.com" + str_dus[i];
-                        //Log.i("du",str_dus[i]);
+                        //og.i("du",str_dus[i]);
                     }
 
                     for(int i=0;i<str_tls.length;i++) {

@@ -6,12 +6,12 @@
 
     <TextView
         android:id="@+id/infoElem_info"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginHorizontal="10dip"
-        android:layout_marginVertical="10dip" />
+        android:layout_margin="10dip"
+        />
 
     <TextView
         android:id="@+id/infoElem_date"
@@ -20,6 +20,7 @@
         app:layout_constraintLeft_toLeftOf="@id/infoElem_info"
         app:layout_constraintTop_toBottomOf="@id/infoElem_info"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginVertical="10dip"/>
+        android:layout_marginTop="10dip"
+        android:layout_marginBottom="10dip"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

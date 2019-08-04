@@ -15,7 +15,6 @@
             android:id="@+id/img_jwc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -23,11 +22,11 @@
             android:src="@drawable/jwc"/>
         <TextView
             android:contentDescription="jwc"
+
             android:id="@+id/text_jwc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/img_jwc"
-            android:layout_columnWeight="1"
             android:layout_centerHorizontal="true"
 
             android:text="教务处"/>
@@ -38,7 +37,6 @@
             android:id="@+id/img_qsbk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_columnWeight="1"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -46,11 +44,11 @@
             android:src="@drawable/qsbk"/>
         <TextView
             android:contentDescription="qsbk"
+
             android:id="@+id/text_qsbk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/img_qsbk"
-            android:layout_columnWeight="1"
             android:layout_centerHorizontal="true"
 
             android:text="糗事百科"/>

@@ -5,17 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +26,8 @@ public class InfoActivity extends AppCompatActivity {
     ArrayList<InfoElement> infoElems;
 
     ListView listView;
+
+    TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +50,35 @@ public class InfoActivity extends AppCompatActivity {
                 Intent intent = new Intent(InfoActivity.this, WebActivity.class);
                 intent.putExtra("detailUrl",infoElem.dUrl);
                 startActivity(intent);
+            }
+        });
+
+        textView = (TextView)findViewById(R.id.infoPage_textView);
+        textView.setText((pageId+1) + "/" + webTool.npages);
+
+        Button prevButton = (Button)findViewById(R.id.infoPage_prevPageButton);
+        prevButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageId--;
+                if(pageId < 0)
+                    pageId = 0;
+
+                loadInfos();
+                textView.setText((pageId+1) + "/" + webTool.npages);
+            }
+        });
+
+        Button nextButton = (Button)findViewById(R.id.infoPage_nextPageButton);
+        nextButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                pageId++;
+                if(pageId > webTool.npages-1)
+                    pageId = webTool.npages-1;
+
+                loadInfos();
+                textView.setText((pageId+1) + "/" + webTool.npages);
             }
         });
     }
