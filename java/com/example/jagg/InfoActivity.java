@@ -32,19 +32,30 @@ public class InfoActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置信息列表界面
         setContentView(R.layout.activity_info);
 
+        //变量初始化
         pageId = 0;
+        listView = (ListView) findViewById(R.id.listView);
+        //初始化 显示“当前页id/总页数”的textView
+        textView = (TextView)findViewById(R.id.infoPage_textView);
+        textView.setText((pageId+1) + "/" + webTool.npages);
 
+        //接收从mainActvity发送的信息（网站的选择）
         Intent intent = getIntent();
         siteName = intent.getStringExtra("siteName");
 
-        listView = (ListView) findViewById(R.id.listView);
+        //加载siteName对应的网站信息
         loadInfos();
 
+        //设置listView的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //发送信息给webActivity并调用webActivity
+
                 InfoElement infoElem = infoElems.get(position);
 
                 Intent intent = new Intent(InfoActivity.this, WebActivity.class);
@@ -53,9 +64,7 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
-        textView = (TextView)findViewById(R.id.infoPage_textView);
-        textView.setText((pageId+1) + "/" + webTool.npages);
-
+        //“上一页”按钮点击事件
         Button prevButton = (Button)findViewById(R.id.infoPage_prevPageButton);
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,6 +78,7 @@ public class InfoActivity extends AppCompatActivity {
             }
         });
 
+        //“下一页”按钮点击事件
         Button nextButton = (Button)findViewById(R.id.infoPage_nextPageButton);
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,6 +93,7 @@ public class InfoActivity extends AppCompatActivity {
         });
     }
 
+    //加载siteName对应的网站信息
     private void loadInfos() {
         infoElems = webTool.getInfoList(siteName,pageId);
 

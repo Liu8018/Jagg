@@ -38,6 +38,7 @@ public class WebActivity extends AppCompatActivity {
            }
         });
 
+        //接收来自infoActivity的信息
         Intent intent = getIntent();
         String dUrl = intent.getStringExtra("detailUrl");
         webView.loadUrl(dUrl);
