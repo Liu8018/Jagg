@@ -13,6 +13,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,9 +40,6 @@ public class InfoActivity extends AppCompatActivity {
         //变量初始化
         pageId = 0;
         listView = (ListView) findViewById(R.id.listView);
-        //初始化 显示“当前页id/总页数”的textView
-        textView = (TextView)findViewById(R.id.infoPage_textView);
-        textView.setText((pageId+1) + "/" + webTool.npages);
 
         //接收从mainActvity发送的信息（网站的选择）
         Intent intent = getIntent();
@@ -49,6 +47,10 @@ public class InfoActivity extends AppCompatActivity {
 
         //加载siteName对应的网站信息
         loadInfos();
+
+        //初始化 显示“当前页id/总页数”的textView
+        textView = (TextView)findViewById(R.id.infoPage_textView);
+        textView.setText((pageId+1) + "/" + webTool.npages);
 
         //设置listView的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
