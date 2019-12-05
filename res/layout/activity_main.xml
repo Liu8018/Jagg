@@ -21,9 +21,8 @@
 
             android:src="@drawable/jwc"/>
         <TextView
-            android:contentDescription="jwc"
+            android:contentDescription="http://jwc.bit.edu.cn/"
 
-            android:id="@+id/text_jwc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/img_jwc"
@@ -34,25 +33,47 @@
 
     <RelativeLayout>
         <ImageView
-            android:id="@+id/img_qsbk"
+            android:id="@+id/img_zdh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
 
-            android:src="@drawable/qsbk"/>
+            android:src="@drawable/zdh"/>
         <TextView
-            android:contentDescription="qsbk"
+            android:contentDescription="http://ac.bit.edu.cn/"
 
-            android:id="@+id/text_qsbk"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_qsbk"
+            android:layout_below="@id/img_zdh"
             android:layout_centerHorizontal="true"
 
-            android:text="糗事百科"/>
+            android:text="自动化"/>
     </RelativeLayout>
+
+    <RelativeLayout>
+        <ImageView
+            android:id="@+id/img_csdn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/csdn"/>
+        <TextView
+            android:contentDescription="https://www.csdn.net/"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_csdn"
+            android:layout_centerHorizontal="true"
+
+            android:text="CSDN"/>
+    </RelativeLayout>
+
+
 
 
 </GridLayout>

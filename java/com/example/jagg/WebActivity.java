@@ -1,31 +1,55 @@
 package com.example.jagg;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.Window;
+import android.view.WindowManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 public class WebActivity extends AppCompatActivity {
 
+    //显示网页用的
     private WebView webView;
     private ProgressBar webProgressBar;
+
+    //网站链接
+    String dUrl;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //设置主界面
         setContentView(R.layout.activity_web);
 
-        webProgressBar = (ProgressBar)findViewById(R.id.webProgressBar);//进度条
+        //actionbar上的返回键
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+        //
+
+
+        //进度条
+        webProgressBar = (ProgressBar)findViewById(R.id.webProgressBar);
 
         webView = (WebView)findViewById(R.id.web_view);
         webView.getSettings().setJavaScriptEnabled(true);
@@ -40,7 +64,10 @@ public class WebActivity extends AppCompatActivity {
 
         //接收来自infoActivity的信息
         Intent intent = getIntent();
-        String dUrl = intent.getStringExtra("detailUrl");
+        dUrl = intent.getStringExtra("detailUrl");
+        String siteName = intent.getStringExtra("siteName");
+        actionBar.setTitle(siteName);
+        //actionBar.setSubtitle("Sub Title");
         webView.loadUrl(dUrl);
 
         webView.setWebChromeClient(webChromeClient);
@@ -104,4 +131,47 @@ public class WebActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode,event);
     }
 
+    //调用menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.web_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.web_menu_search) {
+            //Toast.makeText(WebActivity.this, "You clicked item", Toast.LENGTH_SHORT).show();
+            AlertDialog.Builder builder = new AlertDialog.Builder(WebActivity.this);
+            builder.setTitle("请输入搜索关键词");
+            final EditText et = new EditText(this);
+            builder.setView(et);
+            builder.setPositiveButton("确认" ,  new DialogInterface.OnClickListener() {
+                //确定按钮的响应事件
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Toast.makeText(WebActivity.this, dUrl+"\n"+et.getText().toString(), Toast.LENGTH_SHORT).show();
+                    //调用infoActivity
+                    Intent intent = new Intent(WebActivity.this, WebActivity.class);
+                    intent.putExtra("siteUrl",dUrl);
+                    intent.putExtra("keyWords",et.getText().toString());
+                    startActivity(intent);
+                }
+            });
+
+            builder.setNegativeButton("返回", null);
+            builder.show();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //返回键响应
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
 }

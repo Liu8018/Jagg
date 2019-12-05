@@ -5,7 +5,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -34,17 +37,27 @@ public class MainActivity extends AppCompatActivity {
             //设置鼠标点击事件
             container.setOnClickListener(new View.OnClickListener(){
                 public void onClick(View view){
-                    //向infoActivity发送信息并调用infoActivity
+                    //向webActivity发送信息并调用webActivity
 
                     TextView textView = (TextView) container.getChildAt(1);
-                    //Log.i("siteName",textView.getContentDescription().toString());
+                    //Log.i("detailUrl",textView.getContentDescription().toString());
 
-                    Intent intent = new Intent(MainActivity.this, InfoActivity.class);
-                    intent.putExtra("siteName",textView.getContentDescription().toString());
+                    Intent intent = new Intent(MainActivity.this, WebActivity.class);
+                    intent.putExtra("detailUrl",textView.getContentDescription().toString());
+                    intent.putExtra("siteName",textView.getText());
                     startActivity(intent);
                 }
             });
         }
 
+    }
+
+    //调用menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu items for use in the action bar
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
