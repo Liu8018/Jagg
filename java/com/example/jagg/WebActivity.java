@@ -33,6 +33,9 @@ public class WebActivity extends AppCompatActivity {
     //网站链接
     String dUrl;
 
+    //网站名
+    String siteName;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +47,6 @@ public class WebActivity extends AppCompatActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-
-        //
-
 
         //进度条
         webProgressBar = (ProgressBar)findViewById(R.id.webProgressBar);
@@ -65,7 +65,7 @@ public class WebActivity extends AppCompatActivity {
         //接收来自infoActivity的信息
         Intent intent = getIntent();
         dUrl = intent.getStringExtra("detailUrl");
-        String siteName = intent.getStringExtra("siteName");
+        siteName = intent.getStringExtra("siteName");
         actionBar.setTitle(siteName);
         //actionBar.setSubtitle("Sub Title");
         webView.loadUrl(dUrl);
@@ -155,6 +155,7 @@ public class WebActivity extends AppCompatActivity {
                     //Toast.makeText(WebActivity.this, dUrl+"\n"+et.getText().toString(), Toast.LENGTH_SHORT).show();
                     //调用infoActivity
                     Intent intent = new Intent(WebActivity.this, WebActivity.class);
+                    intent.putExtra("siteName",siteName);
                     intent.putExtra("siteUrl",dUrl);
                     intent.putExtra("keyWords",et.getText().toString());
                     startActivity(intent);

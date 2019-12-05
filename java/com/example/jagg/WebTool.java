@@ -32,6 +32,17 @@ public class WebTool {
         return infos;
     }
 
+    public ArrayList<InfoElement> crawlInfoList(String siteUrl, String keyWords, int pageId) {
+        ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+
+        Site_baidu baidu = new Site_baidu();
+        baidu.getInfos(siteUrl,keyWords,pageId);
+        infos = baidu.infos;
+        npages = baidu.npages;
+
+        return infos;
+    }
+
 }
 
 class InfoElement {
@@ -71,6 +82,15 @@ class funcs {
         }
 
         return url;
+    }
+}
+
+class Site_baidu {
+    public int npages;
+    public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+
+    public void getInfos(String siteUrl, String keyWords, int pageId){
+        String url = "https://www.baidu.com/s?wd= "+keyWords+" site%3A"+siteUrl+" &pn="+String.valueOf(pageId*10-10);
     }
 }
 

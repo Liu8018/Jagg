@@ -20,6 +20,8 @@ import java.util.List;
 
 public class InfoActivity extends AppCompatActivity {
     private String siteName;
+    private String siteUrl;
+    private String keyWords;
     private int pageId;
 
     private WebTool webTool = new WebTool();
@@ -41,11 +43,13 @@ public class InfoActivity extends AppCompatActivity {
         pageId = 0;
         listView = (ListView) findViewById(R.id.listView);
 
-        //接收从mainActvity发送的信息（网站的选择）
+        //接收从webActvity发送的信息（网站链接，搜索关键词）
         Intent intent = getIntent();
         siteName = intent.getStringExtra("siteName");
+        siteUrl = intent.getStringExtra("siteUrl");
+        keyWords = intent.getStringExtra("keyWords");
 
-        //加载siteName对应的网站信息
+        //加载对应的网站信息
         loadInfos();
 
         //初始化 显示“当前页id/总页数”的textView
@@ -95,9 +99,9 @@ public class InfoActivity extends AppCompatActivity {
         });
     }
 
-    //加载siteName对应的网站信息
+    //加载对应的网站信息
     private void loadInfos() {
-        infoElems = webTool.getInfoList(siteName,pageId);
+        infoElems = webTool.crawlInfoList(siteUrl,keyWords,pageId);
 
         InfoElemAdapter adapter = new InfoElemAdapter(
                 InfoActivity.this, R.layout.info_element, infoElems);
