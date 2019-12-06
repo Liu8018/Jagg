@@ -7,14 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".WebActivity">
 
-    <WebView
-        android:id="@+id/web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/webProgressBar"
-        app:layout_constraintBottom_toBottomOf="parent">
-    </WebView>
-
     <androidx.core.widget.ContentLoadingProgressBar
         android:id="@+id/webProgressBar"
         style="@android:style/Widget.ProgressBar.Horizontal"
@@ -24,5 +16,13 @@
         android:max="100"
         android:progress="0"
         android:visibility="gone"/>
+
+    <WebView
+        android:id="@+id/web_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toBottomOf="@id/webProgressBar"
+        app:layout_constraintBottom_toBottomOf="parent">
+    </WebView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

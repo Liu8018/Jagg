@@ -1,36 +1,24 @@
 package com.example.jagg;
 
+import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.icu.text.IDNA;
+import android.os.Bundle;
 import android.util.Log;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 public class WebTool {
     int npages;
-
-    public ArrayList<InfoElement> getInfoList(String siteName, int pageId) {
-        ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
-
-        if(siteName.equals("jwc")) {
-            Site_jwc jwc = new Site_jwc();
-            jwc.getInfos(pageId);
-            infos = jwc.infos;
-            npages = jwc.npages;
-        }
-        else if(siteName.equals("qsbk")) {
-            Site_qsbk qsbk = new Site_qsbk();
-            qsbk.getInfos(pageId);
-            infos = qsbk.infos;
-            npages = qsbk.npages;
-        }
-
-        return infos;
-    }
 
     public ArrayList<InfoElement> crawlInfoList(String siteUrl, String keyWords, int pageId) {
         ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
@@ -86,43 +74,78 @@ class funcs {
 }
 
 class Site_baidu {
-    public int npages;
+    public int npages = 1;
     public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
 
-    public void getInfos(String siteUrl, String keyWords, int pageId){
-        String url = "https://www.baidu.com/s?wd= "+keyWords+" site%3A"+siteUrl+" &pn="+String.valueOf(pageId*10-10);
-    }
-}
+    public void getInfos(String siteUrl, String keyWords, final int pageId){
+        siteUrl = siteUrl.replace("https://","");
+        siteUrl = siteUrl.replace("http://","");
 
-class Site_jwc {
-    public int npages = 30;
-    private String url = "http://jwc.bit.edu.cn/tzgg/index{i}.htm";
-    private String pageUrl;
-    public String[] pageUrls = new String[npages];
+        keyWords += " site:"+siteUrl;
 
-    public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
+        final String pageUrl = "https://www.baidu.com/s?pn="+pageId*10+"&wd="+keyWords;
 
-    Site_jwc() {
-        pageUrls[0] = url.replace("{i}","");
-        for(int i=1;i<npages;i++) {
-            pageUrls[i] = url.replace("{i}",i+"");
-        }
-    }
-
-    public void getInfos(int pageId) {
-        infos.clear();
-        pageUrl = pageUrls[pageId];
+        Log.i("pageUrl", pageUrl);
 
         Thread th = new Thread() {
             @Override
             public void run() {
                 super.run();
                 try {
-                    Document doc = Jsoup.connect(pageUrl).get();
+                    //百度搜索结果需要多次爬取才能成功
+                    Elements els;
+                    Document doc;
+                    do {
+                        //获取源码
+                        doc = Jsoup.connect(pageUrl).get();
+                        els = doc.select("div[class=result c-container ]");
+                    }
+                    while (els.isEmpty());
+                    //Log.i("element內容 第一个", els.get(0).toString());
+                    //Log.i("element內容 结果数", String.valueOf(els.size()));
 
-                    Elements els = doc.select("div.crules_con");
-                    //Log.i("element內容", els.toString());
+                    //获取搜索结果页数
+                    Elements pageIds = doc.select("span[class=pc]");
+                    String npagestr = pageIds.get(pageIds.size()-1).text().toString();
+                    if(!npagestr.equals(""))
+                        npages = Integer.valueOf(npagestr);
+                    else
+                        npages = 1;
 
+                    //获取每条信息标题
+                    String[] str_tls = new String[els.size()];
+                    for(int i=0;i<els.size();i++) {
+                        str_tls[i] = els.get(i).select("a").get(0).text();
+                        //Log.i("title_test", str_tls[i]);
+                    }
+
+                    //获取每条信息简介
+
+                    //获取每条信息的url
+                    String[] str_dus = new String[els.size()];
+                    for(int i=0;i<els.size();i++) {
+                        str_dus[i] = els.get(i).attr("href");
+                        str_dus[i] = funcs.getTrueUrlPath(pageUrl,str_dus[i]);
+                        Log.i("detailUrl",str_dus[i]);
+                    }
+
+                    //获取每条信息时间
+                    String[] str_dts = new String[els.size()];
+                    for(int i=0;i<els.size();i++) {
+                        str_dts[i] = els.get(i).select("span[class= newTimeFactor_before_abs m]").text();
+                        //Log.i("date_test", str_dts[i]);
+                    }
+
+                    for(int i=0;i<str_tls.length;i++) {
+                        InfoElement infoElem = new InfoElement();
+                        infoElem.info = str_tls[i];
+                        infoElem.date = str_dts[i];
+                        infoElem.dUrl = str_dus[i];
+
+                        infos.add(infoElem);
+                    }
+
+                    /*
                     Elements tls = els.select("a");
                     String[] str_tls = new String[tls.size()];
                     for(int i=0;i<tls.size();i++) {
@@ -152,6 +175,7 @@ class Site_jwc {
 
                         infos.add(infoElem);
                     }
+                    */
 
                 }
                 catch (IOException e) {
@@ -170,71 +194,3 @@ class Site_jwc {
     }
 }
 
-class Site_qsbk {
-    public int npages = 13;
-    public String[] pageUrls = new String[npages];
-    private String pageUrl;
-
-    public ArrayList<InfoElement> infos = new ArrayList<InfoElement>();
-
-    Site_qsbk() {
-        for(int i=0;i<npages;i++) {
-            pageUrls[i] = "https://www.qiushibaike.com/8hr/page/" + (i+1);
-        }
-    }
-
-    public void getInfos(int pageId) {
-        infos.clear();
-        pageUrl = pageUrls[pageId];
-
-        Thread th = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                try {
-                    Document doc = Jsoup.connect(pageUrl).get();
-
-                    Elements els = doc.select("li[id]");
-                    //Log.i("element內容", "size:" + els.size() + "\n" + els.toString());
-
-                    Elements tls = els.select("a.recmd-content");
-                    String[] str_tls = new String[tls.size()];
-                    for(int i=0;i<tls.size();i++) {
-                        str_tls[i] = tls.get(i).text();
-                        //Log.i("tl", str_tls[i]);
-                    }
-
-                    String[] str_dts = new String[tls.size()];
-
-                    String[] str_dus = new String[tls.size()];
-                    for(int i=0;i<tls.size();i++) {
-                        str_dus[i] = tls.get(i).attr("href");
-                        str_dus[i] = "https://www.qiushibaike.com" + str_dus[i];
-                        //og.i("du",str_dus[i]);
-                    }
-
-                    for(int i=0;i<str_tls.length;i++) {
-                        InfoElement infoElem = new InfoElement();
-                        infoElem.info = str_tls[i];
-                        infoElem.date = str_dts[i];
-                        infoElem.dUrl = str_dus[i];
-
-                        infos.add(infoElem);
-                    }
-
-                }
-                catch (IOException e) {
-                    Log.e("jsoup error","ioexception");
-                }
-            }
-        };
-
-        th.start();
-        try {
-            th.join();
-        }
-        catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-}

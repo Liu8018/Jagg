@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
 import android.webkit.JsResult;
+import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -64,7 +65,7 @@ public class WebActivity extends AppCompatActivity {
 
         //接收来自infoActivity的信息
         Intent intent = getIntent();
-        dUrl = intent.getStringExtra("detailUrl");
+        dUrl = intent.getStringExtra("siteUrl");
         siteName = intent.getStringExtra("siteName");
         actionBar.setTitle(siteName);
         //actionBar.setSubtitle("Sub Title");
@@ -140,6 +141,7 @@ public class WebActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
 
+    //搜索按钮响应
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.web_menu_search) {
@@ -154,7 +156,7 @@ public class WebActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     //Toast.makeText(WebActivity.this, dUrl+"\n"+et.getText().toString(), Toast.LENGTH_SHORT).show();
                     //调用infoActivity
-                    Intent intent = new Intent(WebActivity.this, WebActivity.class);
+                    Intent intent = new Intent(WebActivity.this, InfoActivity.class);
                     intent.putExtra("siteName",siteName);
                     intent.putExtra("siteUrl",dUrl);
                     intent.putExtra("keyWords",et.getText().toString());

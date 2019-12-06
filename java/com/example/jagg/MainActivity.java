@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
                     //Log.i("detailUrl",textView.getContentDescription().toString());
 
                     Intent intent = new Intent(MainActivity.this, WebActivity.class);
-                    intent.putExtra("detailUrl",textView.getContentDescription().toString());
+                    intent.putExtra("siteUrl",textView.getContentDescription().toString());
                     intent.putExtra("siteName",textView.getText());
                     startActivity(intent);
                 }
