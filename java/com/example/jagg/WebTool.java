@@ -85,7 +85,7 @@ class Site_baidu {
 
         final String pageUrl = "https://www.baidu.com/s?pn="+pageId*10+"&wd="+keyWords;
 
-        Log.i("pageUrl", pageUrl);
+        //Log.i("pageUrl", pageUrl);
 
         Thread th = new Thread() {
             @Override
@@ -93,22 +93,32 @@ class Site_baidu {
                 super.run();
                 try {
                     //百度搜索结果需要多次爬取才能成功
+                    //此处应设置一个最大尝试次数
                     Elements els;
                     Document doc;
+                    int codeLength = 0;
                     do {
                         //获取源码
                         doc = Jsoup.connect(pageUrl).get();
                         els = doc.select("div[class=result c-container ]");
+                        //Log.i("debug try","try");
+
+                        //Log.i("debug code length", String.valueOf(doc.html().length()));
+                        codeLength = doc.html().length();
                     }
-                    while (els.isEmpty());
+                    while (codeLength < 8000);
+                    //Log.i("debug element 结果数",String.valueOf(els.size()));
                     //Log.i("element內容 第一个", els.get(0).toString());
-                    //Log.i("element內容 结果数", String.valueOf(els.size()));
 
                     //获取搜索结果页数
                     Elements pageIds = doc.select("span[class=pc]");
-                    String npagestr = pageIds.get(pageIds.size()-1).text().toString();
-                    if(!npagestr.equals(""))
-                        npages = Integer.valueOf(npagestr);
+                    if(!pageIds.isEmpty()) {
+                        String npagestr = pageIds.get(pageIds.size() - 1).text().toString();
+                        if (!npagestr.equals(""))
+                            npages = Integer.valueOf(npagestr);
+                        else
+                            npages = 1;
+                    }
                     else
                         npages = 1;
 
@@ -124,9 +134,9 @@ class Site_baidu {
                     //获取每条信息的url
                     String[] str_dus = new String[els.size()];
                     for(int i=0;i<els.size();i++) {
-                        str_dus[i] = els.get(i).attr("href");
-                        str_dus[i] = funcs.getTrueUrlPath(pageUrl,str_dus[i]);
-                        Log.i("detailUrl",str_dus[i]);
+                        str_dus[i] = els.get(i).select("a").attr("href");
+                        //str_dus[i] = funcs.getTrueUrlPath(pageUrl,str_dus[i]);
+                        //Log.i("detailUrl",str_dus[i]);
                     }
 
                     //获取每条信息时间
@@ -144,39 +154,6 @@ class Site_baidu {
 
                         infos.add(infoElem);
                     }
-
-                    /*
-                    Elements tls = els.select("a");
-                    String[] str_tls = new String[tls.size()];
-                    for(int i=0;i<tls.size();i++) {
-                        str_tls[i] = tls.get(i).text();
-                        //Log.i("tl", str_tls[i]);
-                    }
-
-                    Elements dts = els.select("span");
-                    String[] str_dts = new String[dts.size()];
-                    for(int i=0;i<dts.size();i++) {
-                        str_dts[i] = dts.get(i).text();
-                        //Log.i("dt", str_dts[i]);
-                    }
-
-                    String[] str_dus = new String[tls.size()];
-                    for(int i=0;i<tls.size();i++) {
-                        str_dus[i] = tls.get(i).attr("href");
-                        str_dus[i] = funcs.getTrueUrlPath(pageUrl,str_dus[i]);
-                        //Log.i("du",str_dus[i]);
-                    }
-
-                    for(int i=0;i<str_tls.length;i++) {
-                        InfoElement infoElem = new InfoElement();
-                        infoElem.info = str_tls[i];
-                        infoElem.date = str_dts[i];
-                        infoElem.dUrl = str_dus[i];
-
-                        infos.add(infoElem);
-                    }
-                    */
-
                 }
                 catch (IOException e) {
                     Log.e("jsoup error","ioexception");

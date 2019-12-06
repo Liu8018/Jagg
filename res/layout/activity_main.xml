@@ -5,54 +5,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_horizontal"
     tools:context=".MainActivity"
     android:columnCount="4"
     android:rowCount="6">
 
-    <RelativeLayout>
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
         <ImageView
-            android:id="@+id/img_jwc"
+            android:id="@+id/img_bit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
 
-            android:src="@drawable/jwc"/>
+            android:src="@drawable/bit"/>
         <TextView
-            android:contentDescription="http://jwc.bit.edu.cn/"
+            android:contentDescription="http://www.bit.edu.cn/"
 
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_jwc"
+            android:layout_below="@id/img_bit"
             android:layout_centerHorizontal="true"
 
-            android:text="教务处"/>
+            android:text="北理工"/>
     </RelativeLayout>
 
-    <RelativeLayout>
-        <ImageView
-            android:id="@+id/img_zdh"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="8dip"
-
-            android:src="@drawable/zdh"/>
-        <TextView
-            android:contentDescription="http://ac.bit.edu.cn/"
-
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/img_zdh"
-            android:layout_centerHorizontal="true"
-
-            android:text="自动化"/>
-    </RelativeLayout>
-
-    <RelativeLayout>
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_csdn"
             android:layout_width="wrap_content"
@@ -73,7 +59,124 @@
             android:text="CSDN"/>
     </RelativeLayout>
 
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
+            android:id="@+id/img_oschina"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
 
+            android:src="@drawable/oschina"/>
+        <TextView
+            android:contentDescription="https://www.oschina.net/"
 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_oschina"
+            android:layout_centerHorizontal="true"
+
+            android:text="开源中国"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
+            android:id="@+id/img_jianshu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/jianshu"/>
+        <TextView
+            android:contentDescription="https://www.jianshu.com/"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_jianshu"
+            android:layout_centerHorizontal="true"
+
+            android:text="简书"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
+            android:id="@+id/img_sspai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/sspai"/>
+        <TextView
+            android:contentDescription="https://sspai.com"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_sspai"
+            android:layout_centerHorizontal="true"
+
+            android:text="少数派"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
+            android:id="@+id/img_sztail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/sztail"/>
+        <TextView
+            android:contentDescription="https://www.dgtle.com/"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_sztail"
+            android:layout_centerHorizontal="true"
+
+            android:text="数字尾巴"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
+            android:id="@+id/img_hqxrb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/hqxrb"/>
+        <TextView
+            android:contentDescription="https://www.qdaily.com/"
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_hqxrb"
+            android:layout_centerHorizontal="true"
+
+            android:text="好奇心日报"/>
+    </RelativeLayout>
 
 </GridLayout>

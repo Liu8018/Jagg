@@ -65,7 +65,7 @@ public class InfoActivity extends AppCompatActivity {
                 InfoElement infoElem = infoElems.get(position);
 
                 Intent intent = new Intent(InfoActivity.this, WebActivity.class);
-                intent.putExtra("detailUrl",infoElem.dUrl);
+                intent.putExtra("siteUrl",infoElem.dUrl);
                 startActivity(intent);
             }
         });
