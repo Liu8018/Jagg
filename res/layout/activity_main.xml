@@ -17,8 +17,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_bit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -41,8 +41,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_csdn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -65,8 +65,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_oschina"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -89,8 +89,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_jianshu"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -113,8 +113,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_sspai"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -137,8 +137,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_sztail"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
@@ -161,8 +161,8 @@
         android:layout_rowWeight="1">
         <ImageView
             android:id="@+id/img_hqxrb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true"
             android:layout_margin="8dip"
