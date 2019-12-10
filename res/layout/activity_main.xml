@@ -21,6 +21,28 @@
         android:layout_columnWeight="1"
         android:layout_rowWeight="1">
         <ImageView
+            android:id="@+id/img_agg"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentTop="true"
+            android:layout_centerHorizontal="true"
+            android:layout_margin="8dip"
+
+            android:src="@drawable/jagg"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/img_agg"
+            android:layout_centerHorizontal="true"
+
+            android:text="聚合"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_gravity="center_horizontal"
+        android:layout_columnWeight="1"
+        android:layout_rowWeight="1">
+        <ImageView
             android:id="@+id/img_addSite"
             android:layout_width="50dp"
             android:layout_height="50dp"

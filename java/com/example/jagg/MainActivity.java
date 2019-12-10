@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -29,11 +28,11 @@ import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-
-import static java.lang.System.in;
+import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -94,13 +93,64 @@ public class MainActivity extends AppCompatActivity {
             final String siteName = data.getStringExtra("siteName");
             final String siteUrl = data.getStringExtra("siteUrl");
 
-            addSite(siteName,siteUrl);
+            addSiteToUI(siteName,siteUrl);
+            addSiteToXml(siteName,siteUrl);
         }
 
     }
 
-    //添加网站
-    private void addSite(final String siteName, final String siteUrl){
+    //将网站信息添加到sites.xml
+    private void addSiteToXml(String siteName, String siteUrl){
+        String xml = readFileToString(jaggRootPath+"/sites.xml");
+
+        String newSite = "<site><name>"+siteName+"</name><url>"+siteUrl+"</url></site>";
+        xml = xml.substring(0,xml.length()-6) + newSite + "\n\n</Doc>";
+
+        writeStringToFile(jaggRootPath+"/sites.xml",xml);
+    }
+
+    //读取文件内容为一个String
+    public String readFileToString(String fileName) {
+        String encoding = "UTF-8";
+        File file = new File(fileName);
+        Long filelength = file.length();
+        byte[] filecontent = new byte[filelength.intValue()];
+        try {
+            FileInputStream in = new FileInputStream(file);
+            in.read(filecontent);
+            in.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            return new String(filecontent, encoding);
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    //写入String到一个文件
+    void writeStringToFile(String filePath, String str){
+        try{
+            FileOutputStream fos = new FileOutputStream(filePath);
+            // 把数据写入到输出流
+            fos.write(str.getBytes());
+            // 关闭输出流
+            fos.close();
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //添加网站到界面
+    private void addSiteToUI(final String siteName, final String siteUrl){
         //10dp=1pixels
         float pixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics());
 
@@ -188,8 +238,8 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //从sites.xml读取网站信息
     void loadSites(){
-        //从sites.xml读取网站信息
         try {
             File xml = new File(jaggRootPath+"/sites.xml");
             Document doc = Jsoup.parse(xml, "UTF-8", "");
@@ -197,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
             for(Element site:sites){
                 String siteName = site.select("name").text();
                 String siteUrl = site.select("url").text();
-                addSite(siteName,siteUrl);
+                addSiteToUI(siteName,siteUrl);
             }
         }
         catch (IOException e) {
