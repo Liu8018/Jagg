@@ -1,6 +1,8 @@
 package com.example.jagg;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import android.content.Context;
 import android.content.Intent;
@@ -8,14 +10,19 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.Window;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
@@ -46,9 +53,19 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         //actionbar上的设置键(左边)
-        //ActionBar actionBar = getSupportActionBar();
-        //actionBar.setHomeButtonEnabled(true);
-        //actionBar.setDisplayHomeAsUpEnabled(true);
+        Drawable drawable= getResources().getDrawable(R.drawable.threelines);
+        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
+        int actionBarHeight=0;
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        actionBarHeight *= 0.6;
+        Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
+                bitmap, actionBarHeight,actionBarHeight, true));
+        //newdrawable.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
         //检查应用根目录是否存在，不存在则创建
         File jaggDir = new File(jaggRootPath);
@@ -59,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
             copyFilesFassets(this,"sites.xml",jaggRootPath+"/sites.xml");
         }
 
-        //加载预先设定的网站
+        //加载网站信息
         loadSites();
 
         //最后一个图标（添加网站）的点击事件
@@ -176,6 +193,9 @@ public class MainActivity extends AppCompatActivity {
 
         //TextView
         TextView tv = new TextView(MainActivity.this);
+        tv.setEllipsize(TextUtils.TruncateAt.valueOf("END"));//字符串太长就在末尾加省略号
+        tv.setMaxLines(2);//限制最大行数
+        tv.setMaxWidth((int)(8*pixels));//限制最大宽度
         tv.setText(siteName);
         tv.setContentDescription(siteUrl);
         RelativeLayout.LayoutParams textViewParams = new RelativeLayout.LayoutParams(
@@ -253,5 +273,13 @@ public class MainActivity extends AppCompatActivity {
         catch (IOException e) {
             Log.e("jsoup error","ioexception");
         }
+    }
+
+    //返回键响应
+    @Override
+    public boolean onSupportNavigateUp() {
+        DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);
+        dl.openDrawer(Gravity.LEFT);
+        return super.onSupportNavigateUp();
     }
 }

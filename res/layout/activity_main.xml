@@ -1,4 +1,67 @@
 <?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_drawerlayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+<RelativeLayout
+    android:id="@+id/main_left"
+    android:layout_width="150dp"
+    android:layout_height="match_parent"
+    android:layout_gravity="left"
+    android:background="@android:color/white">
+
+    <TextView
+        android:id="@+id/main_myStars"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:text="我的收藏"/>
+
+    <View
+        android:id="@+id/main_hline1"
+        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:background="#CFCFCF"
+        android:layout_marginHorizontal="5dp"
+        android:layout_below="@id/main_myStars"/>
+
+    <TextView
+        android:id="@+id/main_editSites"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_below="@id/main_hline1"
+        android:text="编辑网站"/>
+
+    <View
+        android:id="@+id/main_hline2"
+        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:background="#CFCFCF"
+        android:layout_marginHorizontal="5dp"
+        android:layout_below="@id/main_editSites"/>
+
+    <TextView
+        android:id="@+id/main_infoPushSetting"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="12dp"
+        android:layout_below="@id/main_hline2"
+        android:text="信息推送设置"/>
+
+    <View
+        android:id="@+id/main_hline3"
+        android:layout_height="2px"
+        android:layout_width="match_parent"
+        android:background="#CFCFCF"
+        android:layout_marginHorizontal="5dp"
+        android:layout_below="@id/main_infoPushSetting"/>
+
+</RelativeLayout>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/container_scroll_view"
     android:layout_width="match_parent"
@@ -63,3 +126,5 @@
 </GridLayout>
 
 </ScrollView>
+
+</androidx.drawerlayout.widget.DrawerLayout>
