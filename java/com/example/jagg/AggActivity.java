@@ -10,6 +10,8 @@ import android.os.Environment;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -108,6 +110,14 @@ public class AggActivity extends AppCompatActivity {
     //刷新聚合信息
     void refreshAggInfos(){
 
+    }
+
+    //调用menu
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.agg_menu, menu);
+        return super.onCreateOptionsMenu(menu);
     }
 }
 
