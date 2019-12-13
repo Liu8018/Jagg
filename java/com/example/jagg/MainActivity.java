@@ -1,9 +1,12 @@
 package com.example.jagg;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -18,6 +21,7 @@ import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.GridLayout;
 import android.widget.ImageView;
@@ -38,27 +42,33 @@ public class MainActivity extends AppCompatActivity {
 
     FileTool fileTool = new FileTool();
 
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            "android.permission.READ_EXTERNAL_STORAGE",
+            "android.permission.WRITE_EXTERNAL_STORAGE" };
+    public static void verifyStoragePermissions(Activity activity) {
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    "android.permission.WRITE_EXTERNAL_STORAGE");
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,REQUEST_EXTERNAL_STORAGE);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //存储权限
+        verifyStoragePermissions(MainActivity.this);
+
         //设置主界面
         setContentView(R.layout.activity_main);
-
-        //actionbar上的菜单栏键(左边)
-        Drawable drawable= getResources().getDrawable(R.drawable.threelines);
-        Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
-        int actionBarHeight=0;
-        TypedValue tv = new TypedValue();
-        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
-        }
-        actionBarHeight *= 0.6;
-        Drawable newdrawable = new BitmapDrawable(getResources(), Bitmap.createScaledBitmap(
-                bitmap, actionBarHeight,actionBarHeight, true));
-        //newdrawable.setColorFilter(Color.BLUE, PorterDuff.Mode.SRC_ATOP);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setHomeAsUpIndicator(newdrawable);
 
         //检查应用根目录是否存在，不存在则创建
         File jaggDir = new File(jaggRootPath);
@@ -144,6 +154,11 @@ public class MainActivity extends AppCompatActivity {
         xml = xml.substring(0,xml.length()-6) + newSite + "\n</Doc>";
 
         fileTool.writeStringToFile(jaggRootPath+"/sites.xml",xml);
+
+        //checklist增加一个
+        String checklistXml = fileTool.readFileToString(jaggRootPath+"/checklist.xml");
+        checklistXml = checklistXml.substring(0,checklistXml.length()-6) + "<checked>0</checked>\n</Doc>";
+        fileTool.writeStringToFile(jaggRootPath+"/checklist.xml",checklistXml);
     }
 
     //添加网站到界面
@@ -228,12 +243,18 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //菜单栏键响应
+    //actionbar按钮响应
     @Override
-    public boolean onSupportNavigateUp() {
-        DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);
-        dl.openDrawer(Gravity.LEFT);
-        return super.onSupportNavigateUp();
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.main_menu_setting) {
+            DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);
+            dl.openDrawer(Gravity.RIGHT);
+        }
+        else if (item.getItemId() == R.id.main_menu_search){
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     //移除主界面对应的图标

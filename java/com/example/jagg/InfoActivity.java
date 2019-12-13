@@ -60,7 +60,6 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //发送信息给webActivity并调用webActivity
-
                 InfoElement infoElem = infoElems.get(position);
 
                 Intent intent = new Intent(InfoActivity.this, WebActivity.class);

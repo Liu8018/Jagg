@@ -13,27 +13,4 @@
         app:layout_constraintTop_toTopOf="parent">
     </ListView>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="parent">
-
-        <Button
-            android:id="@+id/editSite_buttonBack"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_margin="10dp"
-            android:text="返回"/>
-
-        <Button
-            android:id="@+id/editSite_buttonOk"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:text="确定"/>
-
-    </RelativeLayout>
-
 </androidx.constraintlayout.widget.ConstraintLayout>

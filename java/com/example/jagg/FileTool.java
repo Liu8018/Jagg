@@ -1,6 +1,13 @@
 package com.example.jagg;
 
 import android.content.Context;
+import android.os.Environment;
+import android.util.Log;
+
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -9,6 +16,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 public class FileTool {
 
@@ -77,5 +85,30 @@ public class FileTool {
         catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    //将网站信息装入csElems列表中
+    ArrayList<csElement> loadCsElems(){
+        ArrayList<csElement> csElems = new ArrayList<csElement>();
+
+        try {
+            String jaggRootPath = Environment.getExternalStorageDirectory() + File.separator + "Jagg";
+            File sitesXml = new File(jaggRootPath+"/sites.xml");
+            Document doc = Jsoup.parse(sitesXml, "UTF-8", "");
+            Elements sites = doc.select("site");
+            for(Element site:sites){
+                String siteName = site.select("name").text();
+
+                csElement csElem = new csElement();
+                csElem.checked = true;
+                csElem.siteName = siteName;
+                csElems.add(csElem);
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        return csElems;
     }
 }
