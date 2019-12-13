@@ -1,16 +1,13 @@
 package com.example.jagg;
 
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -22,30 +19,24 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.w3c.dom.Text;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 
 public class MainActivity extends AppCompatActivity {
 
     String jaggRootPath = Environment.getExternalStorageDirectory() + File.separator + "Jagg";
+
+    FileTool fileTool = new FileTool();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
             //复制assets下的文件到应用根目录（使得可以修改数据）
             String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","push_settings.xml"};
             for(String fileName:fileNames) {
-                copyFilesFassets(this, fileName, jaggRootPath + "/" + fileName);
+                fileTool.copyFilesFassets(this, fileName, jaggRootPath + "/" + fileName);
             }
         }
 
@@ -113,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
                 //Toast.makeText(MainActivity.this, "clicked!",Toast.LENGTH_SHORT).show();
                 //启动EditSitesActivity
                 Intent  intent=new Intent(MainActivity.this,EditSitesActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,2);
             }
         });
     }
@@ -138,57 +129,21 @@ public class MainActivity extends AppCompatActivity {
             addSiteToUI(siteName,siteUrl);
             addSiteToXml(siteName,siteUrl);
         }
+        else if(resultCode==2 && requestCode==2){
+            boolean[] checkList = data.getBooleanArrayExtra("checkList");
+            changeSiteUI(checkList);
+        }
 
     }
 
     //将网站信息添加到sites.xml
     private void addSiteToXml(String siteName, String siteUrl){
-        String xml = readFileToString(jaggRootPath+"/sites.xml");
+        String xml = fileTool.readFileToString(jaggRootPath+"/sites.xml");
 
         String newSite = "<site><name>"+siteName+"</name><url>"+siteUrl+"</url></site>";
         xml = xml.substring(0,xml.length()-6) + newSite + "\n</Doc>";
 
-        writeStringToFile(jaggRootPath+"/sites.xml",xml);
-    }
-
-    //读取文件内容为一个String
-    public String readFileToString(String fileName) {
-        String encoding = "UTF-8";
-        File file = new File(fileName);
-        Long filelength = file.length();
-        byte[] filecontent = new byte[filelength.intValue()];
-        try {
-            FileInputStream in = new FileInputStream(file);
-            in.read(filecontent);
-            in.close();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        try {
-            return new String(filecontent, encoding);
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-            return null;
-        }
-    }
-
-    //写入String到一个文件
-    void writeStringToFile(String filePath, String str){
-        try{
-            FileOutputStream fos = new FileOutputStream(filePath);
-            // 把数据写入到输出流
-            fos.write(str.getBytes());
-            // 关闭输出流
-            fos.close();
-        }
-        catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        catch (IOException e) {
-            e.printStackTrace();
-        }
+        fileTool.writeStringToFile(jaggRootPath+"/sites.xml",xml);
     }
 
     //添加网站到界面
@@ -247,40 +202,13 @@ public class MainActivity extends AppCompatActivity {
         //设置点击事件
         rv.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                //向webActivity发送信息并调用webActivity
-                Intent intent = new Intent(MainActivity.this, WebActivity.class);
-                intent.putExtra("siteUrl",siteUrl);
-                intent.putExtra("siteName",siteName);
-                startActivity(intent);
+            //向webActivity发送信息并调用webActivity
+            Intent intent = new Intent(MainActivity.this, WebActivity.class);
+            intent.putExtra("siteUrl",siteUrl);
+            intent.putExtra("siteName",siteName);
+            startActivity(intent);
             }
         });
-    }
-
-    //复制assets下的文件到另一个位置（使得可以修改数据）
-    public void copyFilesFassets(Context context, String oldPath, String newPath) {
-        try {
-            String fileNames[] = context.getAssets().list(oldPath);
-            if (fileNames.length > 0) {//如果是目录
-                File file = new File(newPath);
-                file.mkdirs();//如果文件夹不存在，则递归
-                for (String fileName : fileNames) {
-                    copyFilesFassets(context,oldPath + "/" + fileName,newPath+"/"+fileName);
-                }
-            } else {//如果是文件
-                InputStream is = context.getAssets().open(oldPath);
-                FileOutputStream fos = new FileOutputStream(new File(newPath));
-                byte[] buffer = new byte[1024];
-                int byteCount=0;
-                while((byteCount=is.read(buffer))!=-1) {//循环从输入流读取 buffer字节
-                    fos.write(buffer, 0, byteCount);//将读取的输入流写入到输出流
-                }
-                fos.flush();//刷新缓冲区
-                is.close();
-                fos.close();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
     //从sites.xml读取网站信息
@@ -306,5 +234,20 @@ public class MainActivity extends AppCompatActivity {
         DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);
         dl.openDrawer(Gravity.LEFT);
         return super.onSupportNavigateUp();
+    }
+
+    //移除主界面对应的图标
+    void changeSiteUI(boolean[] checkList){
+        GridLayout grid = (GridLayout) findViewById(R.id.mainPage_layout);
+        int cId = 1;
+        for(int i=0;i<checkList.length;i++){
+            //删除没有被勾选的网站
+            if(!checkList[i]){
+                grid.removeViewAt(cId);
+            }
+            else{
+                cId++;
+            }
+        }
     }
 }

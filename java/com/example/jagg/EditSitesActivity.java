@@ -7,11 +7,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.GridLayout;
 import android.widget.ListView;
 
 import org.jsoup.Jsoup;
@@ -63,7 +65,12 @@ public class EditSitesActivity extends AppCompatActivity {
                     checkList[i] = cb.isChecked();
                 }
 
-                changeSitesXmlAndMainUI(checkList);
+                changeSitesXml(checkList);
+
+
+                Intent intent = getIntent();
+                intent.putExtra("checkList", checkList);
+                setResult(2, intent);
 
                 finish();
             }
@@ -96,8 +103,21 @@ public class EditSitesActivity extends AppCompatActivity {
         }
     }
 
-    //删除sites.xml中对应的网站，并且移除主界面对应的图标
-    void changeSitesXmlAndMainUI(boolean[] checkList){
-        
+    //删除sites.xml中对应的网站
+    void changeSitesXml(boolean[] checkList){
+        FileTool fileTool = new FileTool();
+
+        String sitesStr =  fileTool.readFileToString(jaggRootPath+"/sites.xml");
+        String newSitesStr = "<Doc>\n";
+
+        String[] lines = sitesStr.split("\n");
+        for(int i=0;i<checkList.length;i++){
+            if(checkList[i]){
+                newSitesStr += lines[1+i] + "\n";
+            }
+        }
+
+        newSitesStr += "</Doc>";
+        fileTool.writeStringToFile(jaggRootPath+"/sites.xml",newSitesStr);
     }
 }
