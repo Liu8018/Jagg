@@ -9,7 +9,7 @@
     tools:context=".InfoActivity">
 
     <ListView
-        android:id="@+id/listView"
+        android:id="@+id/info_listView"
         android:layout_width="match_parent"
         android:layout_height="0dip"
         app:layout_constraintTop_toTopOf="parent"

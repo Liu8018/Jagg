@@ -27,11 +27,13 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -52,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
         //设置主界面
         setContentView(R.layout.activity_main);
 
-        //actionbar上的设置键(左边)
+        //actionbar上的菜单栏键(左边)
         Drawable drawable= getResources().getDrawable(R.drawable.threelines);
         Bitmap bitmap = ((BitmapDrawable) drawable).getBitmap();
         int actionBarHeight=0;
@@ -73,14 +75,27 @@ public class MainActivity extends AppCompatActivity {
             jaggDir.mkdirs();
 
             //复制assets下的文件到应用根目录（使得可以修改数据）
-            copyFilesFassets(this,"sites.xml",jaggRootPath+"/sites.xml");
+            String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","push_settings.xml"};
+            for(String fileName:fileNames) {
+                copyFilesFassets(this, fileName, jaggRootPath + "/" + fileName);
+            }
         }
 
         //加载网站信息
         loadSites();
 
-        //最后一个图标（添加网站）的点击事件
+        //第一个图标（聚合）的点击事件
         GridLayout grid = (GridLayout) findViewById(R.id.mainPage_layout);
+        final RelativeLayout container0 = (RelativeLayout) grid.getChildAt(0);
+        container0.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //启动AggActivity
+                Intent  intent=new Intent(MainActivity.this,AggActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //最后一个图标（添加网站）的点击事件
         final int childCount = grid.getChildCount();
         final RelativeLayout container = (RelativeLayout) grid.getChildAt(childCount-1);
         container.setOnClickListener(new View.OnClickListener(){
@@ -91,6 +106,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //左侧菜单中“编辑网站”的点击事件
+        RelativeLayout editSiteBt = (RelativeLayout)findViewById(R.id.main_editSites);
+        editSiteBt.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //Toast.makeText(MainActivity.this, "clicked!",Toast.LENGTH_SHORT).show();
+                //启动EditSitesActivity
+                Intent  intent=new Intent(MainActivity.this,EditSitesActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 
     //调用menu
@@ -121,7 +146,7 @@ public class MainActivity extends AppCompatActivity {
         String xml = readFileToString(jaggRootPath+"/sites.xml");
 
         String newSite = "<site><name>"+siteName+"</name><url>"+siteUrl+"</url></site>";
-        xml = xml.substring(0,xml.length()-6) + newSite + "\n\n</Doc>";
+        xml = xml.substring(0,xml.length()-6) + newSite + "\n</Doc>";
 
         writeStringToFile(jaggRootPath+"/sites.xml",xml);
     }
@@ -275,7 +300,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //返回键响应
+    //菜单栏键响应
     @Override
     public boolean onSupportNavigateUp() {
         DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);

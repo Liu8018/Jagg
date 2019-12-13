@@ -13,7 +13,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,7 @@ public class InfoActivity extends AppCompatActivity {
 
         //变量初始化
         pageId = 0;
-        listView = (ListView) findViewById(R.id.listView);
+        listView = (ListView) findViewById(R.id.info_listView);
 
         //接收从webActvity发送的信息（网站链接，搜索关键词）
         Intent intent = getIntent();

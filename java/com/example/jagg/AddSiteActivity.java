@@ -15,6 +15,8 @@ public class AddSiteActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_site);
 
+        setTitle("添加网站");
+
         final EditText et_name = (EditText)findViewById(R.id.add_site_name);
         final EditText et_url = (EditText)findViewById(R.id.add_site_url);
         Button bt_cancel = (Button)findViewById(R.id.add_site_cancel);
