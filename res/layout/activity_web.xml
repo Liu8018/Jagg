@@ -20,7 +20,7 @@
     <WebView
         android:id="@+id/web_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/webProgressBar"
         app:layout_constraintBottom_toBottomOf="parent">
     </WebView>

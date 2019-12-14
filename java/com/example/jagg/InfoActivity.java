@@ -62,8 +62,9 @@ public class InfoActivity extends AppCompatActivity {
                 //发送信息给webActivity并调用webActivity
                 InfoElement infoElem = infoElems.get(position);
 
-                Intent intent = new Intent(InfoActivity.this, WebActivity.class);
+                Intent intent = new Intent(InfoActivity.this, WebActivity_dview.class);
                 intent.putExtra("siteUrl",infoElem.dUrl);
+                intent.putExtra("siteName",infoElem.info);
                 startActivity(intent);
             }
         });

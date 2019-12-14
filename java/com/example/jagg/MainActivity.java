@@ -11,8 +11,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Environment;
 import android.text.TextUtils;
@@ -77,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
             jaggDir.mkdirs();
 
             //复制assets下的文件到应用根目录（使得可以修改数据）
-            String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","agg_settings.xml"};
+            String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","agg_settings.xml","star_infos.xml"};
             for(String fileName:fileNames) {
                 fileTool.copyFilesFassets(this, fileName, jaggRootPath + "/" + fileName);
             }
@@ -93,7 +91,6 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view){
                 //检查是否已经设置相关信息，若没有则启动设置界面
                 String keywords = fileTool.readKeywords();
-                Log.i("debug_keywords",keywords);
                 if(keywords.equals("")){
                     Toast.makeText(MainActivity.this, "请先设置相关信息",Toast.LENGTH_SHORT).show();
 
@@ -196,9 +193,18 @@ public class MainActivity extends AppCompatActivity {
         bitmap.eraseColor(Color.parseColor("#e0ffff")); //填充颜色
         Canvas canvas = new Canvas(bitmap);
         Paint paint = new Paint();
-        paint.setTextSize(100);
-        paint.setColor(Color.BLACK);
-        canvas.drawText(siteName.substring(0,1),50,130,paint);
+
+        char firstChar = siteName.charAt(0);
+        if(isChinese(firstChar)) {
+            paint.setTextSize(100);
+            paint.setColor(Color.BLACK);
+            canvas.drawText(String.valueOf(firstChar), 50, 130, paint);
+        }
+        else{
+            paint.setTextSize(120);
+            paint.setColor(Color.BLACK);
+            canvas.drawText(String.valueOf(firstChar).toUpperCase(), 60, 140, paint);
+        }
 
         iv.setImageBitmap(bitmap);
         RelativeLayout.LayoutParams imageViewParams = new RelativeLayout.LayoutParams(
@@ -272,9 +278,6 @@ public class MainActivity extends AppCompatActivity {
             DrawerLayout dl = (DrawerLayout) findViewById(R.id.main_drawerlayout);
             dl.openDrawer(Gravity.RIGHT);
         }
-        else if (item.getItemId() == R.id.main_menu_search){
-
-        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -291,6 +294,15 @@ public class MainActivity extends AppCompatActivity {
             else{
                 cId++;
             }
+        }
+    }
+
+    //判断字符是中文还是英文
+    public static boolean isChinese(char ch) {
+        if ((ch + "").getBytes().length == 1) {
+            return false;//英文
+        } else {
+            return true;//中文
         }
     }
 }

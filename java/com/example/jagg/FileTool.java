@@ -25,6 +25,7 @@ public class FileTool {
     String aggSettingsXmlPath = jaggRootPath + "/agg_settings.xml";
     String sitesXmlPath = jaggRootPath+"/sites.xml";
     String aggInfosXmlPath = jaggRootPath+"/agg_infos.xml";
+    String starInfosXmlPath = jaggRootPath+"/star_infos.xml";
 
     //复制assets下的文件到另一个位置（使得可以修改数据）
     public void copyFilesFassets(Context context, String oldPath, String newPath) {
@@ -205,5 +206,77 @@ public class FileTool {
         }
 
         return infoElems;
+    }
+
+    /*
+    //检查网页是否已经收藏
+    boolean isStarred(String url){
+        boolean isStar = false;
+
+        try {
+            File xml = new File(starInfosXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements infos = doc.select("info");
+            for(Element info:infos){
+                if(info.select("dUrl").text().equals(url)){
+                    isStar = true;
+                    break;
+                }
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        return isStar;
+    }
+
+    //删除一个收藏
+    void unStarInfo(String url){
+        Log.i("debug_url",url+".");
+        int id=0;
+
+        try {
+            File xml = new File(starInfosXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements infos = doc.select("info");
+            for(Element info:infos){
+                Log.i("debug_infourl",info.select("dUrl").text()+".");
+                if(info.select("dUrl").text().equals(url))
+                    break;
+                id++;
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        String starInfoXml = readFileToString(starInfosXmlPath);
+        String[] lines = starInfoXml.split("\n");
+        lines[1+id] = "";
+
+        String newXml = "";
+        for(String line:lines){
+            if(line.equals(""))
+                continue;
+            newXml += line + "\n";
+        }
+
+        writeStringToFile(starInfosXmlPath,newXml);
+    }
+    */
+
+    //将一个网页添加进收藏
+    void addStarInfo(InfoElement elem){
+        String starInfoXml = readFileToString(starInfosXmlPath);
+        String line = "<info>"+"<title>"+elem.info+"</title>"+"<date>"+elem.date+"</date>"+"<dUrl>"+elem.dUrl+"</dUrl>"+"</info>\n";
+        starInfoXml = starInfoXml.substring(0,starInfoXml.length()-6) + line + "</Doc>";
+
+        writeStringToFile(starInfosXmlPath,starInfoXml);
+    }
+
+    //删除某一行的收藏
+    void removeStarInfo(int id){
+
     }
 }

@@ -27,7 +27,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
-public class WebActivity extends AppCompatActivity {
+public class WebActivity_dview extends AppCompatActivity {
 
     FileTool fileTool = new FileTool();
 
@@ -60,11 +60,11 @@ public class WebActivity extends AppCompatActivity {
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().getJavaScriptEnabled();
         webView.setWebViewClient(new WebViewClient() {
-           @Override
-           public boolean shouldOverrideUrlLoading(WebView view, String url) {
-               view.loadUrl(url);
-               return true;
-           }
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                view.loadUrl(url);
+                return true;
+            }
         });
 
         //接收来自infoActivity的信息
@@ -140,7 +140,7 @@ public class WebActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.web_menu, menu);
+        inflater.inflate(R.menu.web_menu_dview, menu);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -148,28 +148,10 @@ public class WebActivity extends AppCompatActivity {
     //menu按钮响应
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == R.id.web_menu_search) {
-            //Toast.makeText(WebActivity.this, "You clicked item", Toast.LENGTH_SHORT).show();
-            AlertDialog.Builder builder = new AlertDialog.Builder(WebActivity.this);
-            builder.setTitle("请输入搜索关键词");
-            final EditText et = new EditText(this);
-            builder.setView(et);
-            builder.setPositiveButton("确认" ,  new DialogInterface.OnClickListener() {
-                //确定按钮的响应事件
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Toast.makeText(WebActivity.this, dUrl+"\n"+et.getText().toString(), Toast.LENGTH_SHORT).show();
-                    //调用infoActivity
-                    Intent intent = new Intent(WebActivity.this, InfoActivity.class);
-                    intent.putExtra("siteName",siteName);
-                    intent.putExtra("siteUrl",dUrl);
-                    intent.putExtra("keyWords",et.getText().toString());
-                    startActivity(intent);
-                }
-            });
+        if (item.getItemId() == R.id.web_menu_addStar) {
+            //fileTool.addStarInfo();
 
-            builder.setNegativeButton("返回", null);
-            builder.show();
+            Toast.makeText(WebActivity_dview.this, "已加入收藏",Toast.LENGTH_SHORT).show();
         }
 
         return super.onOptionsItemSelected(item);

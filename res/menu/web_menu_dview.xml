@@ -5,9 +5,9 @@
     tools:context="com.youli.feiyu.fynotification.MainActivity">
 
     <item
-        android:id="@+id/main_menu_setting"
+        android:id="@+id/web_menu_addStar"
         android:orderInCategory="1"
-        android:icon="@drawable/threelines"
+        android:icon="@drawable/add_star"
         android:title="@string/app_name"
         app:showAsAction="ifRoom" />
 </menu>

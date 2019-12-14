@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.icu.text.IDNA;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -13,6 +14,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
@@ -99,16 +101,22 @@ class Site_baidu {
                     int codeLength = 0;
                     do {
                         //获取源码
-                        doc = Jsoup.connect(pageUrl).get();
+                        doc = Jsoup.connect(pageUrl)
+                                //.data("query", "Java")
+                                //.userAgent("Mozilla/4.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)")
+                                .get();
                         els = doc.select("div[class=result c-container ]");
-                        //Log.i("debug try","try");
 
-                        //Log.i("debug code length", String.valueOf(doc.html().length()));
+                        //Log.i("debug_code",doc.html());
+                        //Log.i("debug_code length", String.valueOf(doc.html().length()));
                         codeLength = doc.html().length();
                     }
                     while (codeLength < 8000);
                     //Log.i("debug element 结果数",String.valueOf(els.size()));
                     //Log.i("element內容 第一个", els.get(0).toString());
+
+                    //FileTool fileTool = new FileTool();
+                    //fileTool.writeStringToFile(Environment.getExternalStorageDirectory()+"/Jagg/debug_html.txt",doc.html());
 
                     //获取搜索结果页数
                     Elements pageIds = doc.select("span[class=pc]");
