@@ -135,7 +135,6 @@ public class WebActivity extends AppCompatActivity {
     //调用menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.web_menu, menu);
         return super.onCreateOptionsMenu(menu);

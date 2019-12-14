@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -36,11 +37,13 @@ public class AggActivity extends AppCompatActivity {
 
     String jaggRootPath = Environment.getExternalStorageDirectory() + File.separator + "Jagg";
 
+    FileTool fileTool = new FileTool();
+
     ListView listView_left;
     ListView listView_right;
 
-    ArrayList<csElement> csElems;
-    ArrayList<InfoElement> infoElems;
+    ArrayList<csElement> csElems = new ArrayList<csElement>();
+    ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,6 +51,10 @@ public class AggActivity extends AppCompatActivity {
         setContentView(R.layout.activity_agg);
 
         setTitle("聚合");
+
+        //显示关键词的textView
+        TextView textview = (TextView)findViewById(R.id.agg_keywordText);
+        textview.setText("关键词："+fileTool.readKeywords());
 
         //加载checkSitesList
         loadCheckSitesList();
@@ -60,21 +67,24 @@ public class AggActivity extends AppCompatActivity {
         listView_left.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //改变csElems
                 csElems.get(position).checked = !csElems.get(position).checked;
+                //改变checkbox列表
                 ConstraintLayout cl = (ConstraintLayout) listView_left.getChildAt(position-listView_left.getFirstVisiblePosition());
                 CheckBox cb = (CheckBox) cl.getChildAt(1);
                 cb.setChecked(csElems.get(position).checked);
+
+                //写入checklist.xml
+                changeChecklistXml(position,csElems.get(position).checked);
             }
         });
 
-        //若数据库已有爬下来的信息列表，则直接加载
-        if(aggInfosExist()){
-
+        //若数据库还没有爬下来的信息列表，则刷新
+        if(!aggInfosExist()){
+            refreshAggInfos();
         }
-        //若没有则刷新
-        else{
-
-        }
+        //加载信息列表
+        loadAggInfos();
     }
 
     //加载checkSitesList
@@ -107,9 +117,60 @@ public class AggActivity extends AppCompatActivity {
         return false;
     }
 
-    //刷新聚合信息
+    //刷新聚合信息，并写入到agg_infos.xml
     void refreshAggInfos(){
+        //读取网站链接列表
+        String[] siteUrls = new String[csElems.size()];
+        try {
+            File xml = new File(jaggRootPath+"/sites.xml");
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements sites = doc.select("site");
+            for(int i=0;i<sites.size();i++){
+                String siteUrl = sites.get(i).select("url").text();
+                siteUrls[i] = siteUrl;
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
 
+        //获取关键词
+        String keywords = fileTool.readKeywords();
+
+        //遍历网站，找到checked的网站获取信息
+        WebTool webTool = new WebTool();
+        for(int i=0;i<csElems.size();i++){
+            if(csElems.get(i).checked) {
+                ArrayList<InfoElement> tmpInfoElems = webTool.crawlInfoList(siteUrls[i],keywords,0);
+                infoElems.addAll(tmpInfoElems);
+            }
+        }
+
+    }
+
+    //加载聚合信息
+    void loadAggInfos(){
+        listView_right = (ListView)findViewById(R.id.agg_listview_right);
+        InfoElemAdapter_inagg adapter = new InfoElemAdapter_inagg(AggActivity.this, R.layout.info_element_inagg, infoElems);
+        listView_right.setAdapter(adapter);
+    }
+
+    //改动写入checklist.xml
+    void changeChecklistXml(int position, boolean checked){
+        FileTool fileTool = new FileTool();
+        String xml = fileTool.readFileToString(jaggRootPath+"/checklist.xml");
+        String[] lines = xml.split("\n");
+        if(checked){
+            lines[1+position] = "<checked>1</checked>";
+        }
+        else{
+            lines[1+position] = "<checked>0</checked>";
+        }
+        String newXml = "";
+        for(String line:lines){
+            newXml += line + "\n";
+        }
+        fileTool.writeStringToFile(jaggRootPath+"/checklist.xml",newXml);
     }
 
     //调用menu
@@ -119,7 +180,21 @@ public class AggActivity extends AppCompatActivity {
         inflater.inflate(R.menu.agg_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
+
+    //menu按钮点击事件
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.agg_menu_setting) {
+
+        }
+        else if (item.getItemId() == R.id.agg_menu_refresh){
+            refreshAggInfos();
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
+
 
 class csElement {
     boolean checked;
@@ -150,6 +225,33 @@ class CsElemAdapter extends ArrayAdapter<csElement> {
 
         cb.setChecked(csElem.checked);
         tv.setText(csElem.siteName);
+
+        return view;
+    }
+}
+
+class InfoElemAdapter_inagg extends ArrayAdapter<InfoElement> {
+    private int index;
+
+    public InfoElemAdapter_inagg(Context context, int id, List<InfoElement> objects) {
+        super(context,id,objects);
+        index = id;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        InfoElement infoElem = getItem(position); // 获取当前项的InfoElement实例
+        View view;
+        if(convertView == null) {
+            view = LayoutInflater.from(getContext()).inflate(index, null);
+        } else {
+            view = convertView;
+        }
+        TextView info = (TextView) view.findViewById(R.id.infoElem_info_inagg);
+        TextView date = (TextView) view.findViewById(R.id.infoElem_date_inagg);
+
+        info.setText(infoElem.info);
+        date.setText(infoElem.date);
 
         return view;
     }

@@ -25,7 +25,7 @@ public class InfoActivity extends AppCompatActivity {
 
     private WebTool webTool = new WebTool();
 
-    ArrayList<InfoElement> infoElems;
+    ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
 
     ListView listView;
 

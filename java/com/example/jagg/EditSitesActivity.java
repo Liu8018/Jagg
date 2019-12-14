@@ -89,13 +89,12 @@ public class EditSitesActivity extends AppCompatActivity {
     //调用menu
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu items for use in the action bar
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.edit_sites_menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
-    //工具栏按钮点击事件
+    //menu按钮点击事件
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.edit_sites_menu_cancel) {

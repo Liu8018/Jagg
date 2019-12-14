@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class AddSiteActivity extends AppCompatActivity {
 
@@ -34,9 +35,23 @@ public class AddSiteActivity extends AppCompatActivity {
         bt_ok.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String siteName = et_name.getText().toString();
+                String siteUrl = et_url.getText().toString();
+
+                if(siteName.isEmpty()){
+                    Toast.makeText(AddSiteActivity.this, "网站名不能为空！",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if(siteUrl.isEmpty()){
+                    Toast.makeText(AddSiteActivity.this, "网站链接不能为空！",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //此处应该检查一下用户设定的网站能否正常访问
+
                 Intent intent = getIntent();
-                intent.putExtra("siteName", et_name.getText().toString());
-                intent.putExtra("siteUrl", et_url.getText().toString());
+                intent.putExtra("siteName", siteName);
+                intent.putExtra("siteUrl", siteUrl);
                 setResult(1, intent);
                 finish();
             }

@@ -27,6 +27,7 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -76,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
             jaggDir.mkdirs();
 
             //复制assets下的文件到应用根目录（使得可以修改数据）
-            String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","push_settings.xml"};
+            String[] fileNames = {"sites.xml","agg_infos.xml","checklist.xml","agg_settings.xml"};
             for(String fileName:fileNames) {
                 fileTool.copyFilesFassets(this, fileName, jaggRootPath + "/" + fileName);
             }
@@ -90,9 +91,20 @@ public class MainActivity extends AppCompatActivity {
         final RelativeLayout container0 = (RelativeLayout) grid.getChildAt(0);
         container0.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
-                //启动AggActivity
-                Intent  intent=new Intent(MainActivity.this,AggActivity.class);
-                startActivity(intent);
+                //检查是否已经设置相关信息，若没有则启动设置界面
+                String keywords = fileTool.readKeywords();
+                Log.i("debug_keywords",keywords);
+                if(keywords.equals("")){
+                    Toast.makeText(MainActivity.this, "请先设置相关信息",Toast.LENGTH_SHORT).show();
+
+                    Intent  intent=new Intent(MainActivity.this,AggSettingActivity.class);
+                    startActivity(intent);
+                }
+                else {
+                    //启动AggActivity
+                    Intent intent = new Intent(MainActivity.this, AggActivity.class);
+                    startActivity(intent);
+                }
             }
         });
 
@@ -107,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //左侧菜单中“编辑网站”的点击事件
+        //右侧菜单中“编辑网站”的点击事件
         RelativeLayout editSiteBt = (RelativeLayout)findViewById(R.id.main_editSites);
         editSiteBt.setOnClickListener(new View.OnClickListener(){
             public void onClick(View view){
@@ -115,6 +127,16 @@ public class MainActivity extends AppCompatActivity {
                 //启动EditSitesActivity
                 Intent  intent=new Intent(MainActivity.this,EditSitesActivity.class);
                 startActivityForResult(intent,2);
+            }
+        });
+
+        //右侧菜单中“信息推送设置”的点击事件
+        RelativeLayout aggSettingBt = (RelativeLayout)findViewById(R.id.main_aggSetting);
+        aggSettingBt.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //启动AggSettingActivity
+                Intent  intent=new Intent(MainActivity.this,AggSettingActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -243,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //actionbar按钮响应
+    //menu按钮响应
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.main_menu_setting) {

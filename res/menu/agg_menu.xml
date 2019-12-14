@@ -5,6 +5,13 @@
     tools:context="com.youli.feiyu.fynotification.MainActivity">
 
     <item
+        android:id="@+id/agg_menu_refresh"
+        android:orderInCategory="1"
+        android:icon="@drawable/refesh"
+        android:title="@string/app_name"
+        app:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/agg_menu_setting"
         android:orderInCategory="1"
         android:icon="@drawable/setting"

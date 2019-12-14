@@ -20,6 +20,12 @@ import java.util.ArrayList;
 
 public class FileTool {
 
+    String jaggRootPath = Environment.getExternalStorageDirectory() + File.separator + "Jagg";
+
+    String aggSettingsXmlPath = jaggRootPath + "/agg_settings.xml";
+    String sitesXmlPath = jaggRootPath+"/sites.xml";
+    String aggInfosXmlPath = jaggRootPath+"/agg_infos.xml";
+
     //复制assets下的文件到另一个位置（使得可以修改数据）
     public void copyFilesFassets(Context context, String oldPath, String newPath) {
         try {
@@ -92,8 +98,7 @@ public class FileTool {
         ArrayList<csElement> csElems = new ArrayList<csElement>();
 
         try {
-            String jaggRootPath = Environment.getExternalStorageDirectory() + File.separator + "Jagg";
-            File sitesXml = new File(jaggRootPath+"/sites.xml");
+            File sitesXml = new File(sitesXmlPath);
             Document doc = Jsoup.parse(sitesXml, "UTF-8", "");
             Elements sites = doc.select("site");
             for(Element site:sites){
@@ -110,5 +115,67 @@ public class FileTool {
         }
 
         return csElems;
+    }
+
+    //写入关键词信息
+    void writeKeyword(String keywords){
+        String xml = readFileToString(aggSettingsXmlPath);
+        String[] lines = xml.split("\n");
+        lines[1] = "<keywords>"+keywords+"</keywords>";
+        String newXml = "";
+        for(String line:lines){
+            newXml += line + "\n";
+        }
+        writeStringToFile(aggSettingsXmlPath,newXml);
+    }
+
+    //读取关键词信息
+    String readKeywords(){
+        try {
+            File xml = new File(aggSettingsXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements keywords = doc.select("keywords");
+            return keywords.text();
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+            return "";
+        }
+    }
+
+    //写入刷新时间
+    void writeRefreshTime(String refreshTime){
+        String xml = readFileToString(aggSettingsXmlPath);
+        String[] lines = xml.split("\n");
+        lines[2] = "<refreshTime>"+refreshTime+"</refreshTime>";
+        String newXml = "";
+        for(String line:lines){
+            newXml += line + "\n";
+        }
+        writeStringToFile(aggSettingsXmlPath,newXml);
+    }
+
+    //读取刷新时间
+    String readRefreshTime(){
+        try {
+            File xml = new File(aggSettingsXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements refreshTime = doc.select("refreshTime");
+            return refreshTime.text();
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+            return "";
+        }
+    }
+
+    //写入infos
+    void writeAggInfos(ArrayList<InfoElement> infoElems){
+        
+    }
+
+    //读取infos
+    ArrayList<InfoElement> readAggInfos(){
+
     }
 }
