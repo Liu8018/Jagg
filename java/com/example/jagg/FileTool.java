@@ -171,11 +171,39 @@ public class FileTool {
 
     //写入infos
     void writeAggInfos(ArrayList<InfoElement> infoElems){
-        
+        String aggInfoXml = "<Doc>\n";
+        for(InfoElement elem:infoElems){
+            String line = "<info>"+"<title>"+elem.info+"</title>"+"<date>"+elem.date+"</date>"+"<dUrl>"+elem.dUrl+"</dUrl>"+"</info>\n";
+            aggInfoXml += line;
+        }
+        aggInfoXml += "</Doc>";
+
+        writeStringToFile(aggInfosXmlPath,aggInfoXml);
     }
 
     //读取infos
     ArrayList<InfoElement> readAggInfos(){
+        ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
 
+        try {
+            File xml = new File(aggInfosXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements infos = doc.select("info");
+            for(Element info:infos){
+                String title = info.select("title").text();
+                String date = info.select("date").text();
+                String dUrl = info.select("dUrl").text();
+                InfoElement infoElem = new InfoElement();
+                infoElem.info = title;
+                infoElem.date = date;
+                infoElem.dUrl = dUrl;
+                infoElems.add(infoElem);
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        return infoElems;
     }
 }

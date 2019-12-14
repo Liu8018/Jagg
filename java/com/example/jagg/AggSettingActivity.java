@@ -49,6 +49,7 @@ public class AggSettingActivity extends AppCompatActivity {
             fileTool.writeKeyword(keywords);
             fileTool.writeRefreshTime(refreshTime);
 
+            setResult(1);
             finish();
         }
 

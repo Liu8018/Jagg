@@ -80,7 +80,8 @@ public class AggActivity extends AppCompatActivity {
         });
 
         //若数据库还没有爬下来的信息列表，则刷新
-        if(!aggInfosExist()){
+        infoElems = fileTool.readAggInfos();
+        if(infoElems.isEmpty()){
             refreshAggInfos();
         }
         //加载信息列表
@@ -112,13 +113,11 @@ public class AggActivity extends AppCompatActivity {
         }
     }
 
-    //检查数据库是否已有爬下来的信息列表
-    boolean aggInfosExist(){
-        return false;
-    }
-
     //刷新聚合信息，并写入到agg_infos.xml
     void refreshAggInfos(){
+        //先清空infoElems
+        infoElems.clear();
+
         //读取网站链接列表
         String[] siteUrls = new String[csElems.size()];
         try {
@@ -146,6 +145,7 @@ public class AggActivity extends AppCompatActivity {
             }
         }
 
+        fileTool.writeAggInfos(infoElems);
     }
 
     //加载聚合信息
@@ -185,13 +185,29 @@ public class AggActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.agg_menu_setting) {
-
+            //启动AggSettingActivity
+            Intent  intent=new Intent(AggActivity.this,AggSettingActivity.class);
+            startActivityForResult(intent,1);
         }
         else if (item.getItemId() == R.id.agg_menu_refresh){
             refreshAggInfos();
+            loadAggInfos();
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(resultCode==1 && requestCode==1){
+            TextView textview = (TextView) findViewById(R.id.agg_keywordText);
+            textview.setText("关键词：" + fileTool.readKeywords());
+            refreshAggInfos();
+            loadAggInfos();
+        }
+
     }
 }
 
