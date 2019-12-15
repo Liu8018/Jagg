@@ -12,7 +12,12 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MyStarsActivity"></activity>
+        <receiver
+            android:name=".RefreshAggInfoService"
+            android:enabled="true"
+            android:exported="true"></receiver>
+
+        <activity android:name=".MyStarsActivity" />
         <activity android:name=".EditStarsActivity" />
         <activity android:name=".WebActivity_dview" />
         <activity android:name=".AggSettingActivity" />

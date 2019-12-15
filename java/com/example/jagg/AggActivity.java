@@ -86,6 +86,20 @@ public class AggActivity extends AppCompatActivity {
         }
         //加载信息列表
         loadAggInfos();
+
+        //设置listView_right的点击事件
+        listView_right.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //发送信息给webActivity并调用webActivity
+                InfoElement infoElem = infoElems.get(position);
+
+                Intent intent = new Intent(AggActivity.this, WebActivity_dview.class);
+                intent.putExtra("siteUrl",infoElem.dUrl);
+                intent.putExtra("siteName",infoElem.info);
+                startActivity(intent);
+            }
+        });
     }
 
     //加载checkSitesList
@@ -265,6 +279,10 @@ class InfoElemAdapter_inagg extends ArrayAdapter<InfoElement> {
         }
         TextView info = (TextView) view.findViewById(R.id.infoElem_info_inagg);
         TextView date = (TextView) view.findViewById(R.id.infoElem_date_inagg);
+
+        if(date.getText().equals("")){
+            date.setHeight(0);
+        }
 
         info.setText(infoElem.info);
         date.setText(infoElem.date);

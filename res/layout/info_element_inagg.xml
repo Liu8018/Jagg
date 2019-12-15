@@ -6,9 +6,8 @@
 
     <TextView
         android:id="@+id/infoElem_info_inagg"
-        android:layout_width="match_parent"
+        android:layout_width="220dp"
         android:layout_height="wrap_content"
-        android:maxWidth="220dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_margin="10dip"
