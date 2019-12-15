@@ -266,6 +266,54 @@ public class FileTool {
     }
     */
 
+    //读取收藏夹
+    ArrayList<csElement> readStarInfos(){
+        ArrayList<csElement> csElems = new ArrayList<csElement>();
+
+        try {
+            File xml = new File(starInfosXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements infos = doc.select("info");
+            for(Element info:infos){
+                String title = info.select("title").text();
+
+                csElement elem = new csElement();
+                elem.checked = true;
+                elem.siteName = title;
+                csElems.add(elem);
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        return csElems;
+    }
+    ArrayList<InfoElement> readStarInfos_detail(){
+        ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
+
+        try {
+            File xml = new File(starInfosXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements infos = doc.select("info");
+            for(Element info:infos){
+                String title = info.select("title").text();
+                String date = info.select("date").text();
+                String dUrl = info.select("dUrl").text();
+                InfoElement infoElem = new InfoElement();
+                infoElem.info = title;
+                infoElem.date = date;
+                infoElem.dUrl = dUrl;
+                infoElems.add(infoElem);
+            }
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+        }
+
+        return infoElems;
+    }
+
     //将一个网页添加进收藏
     void addStarInfo(InfoElement elem){
         String starInfoXml = readFileToString(starInfosXmlPath);
@@ -277,6 +325,14 @@ public class FileTool {
 
     //删除某一行的收藏
     void removeStarInfo(int id){
-
+        String xml = readFileToString(starInfosXmlPath);
+        String[] lines = xml.split("\n");
+        lines[1+id] = "";
+        String newXml = "";
+        for(String line:lines){
+            if(!line.equals(""))
+                newXml += line + "\n";
+        }
+        writeStringToFile(starInfosXmlPath,newXml);
     }
 }

@@ -149,7 +149,11 @@ public class WebActivity_dview extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.web_menu_addStar) {
-            //fileTool.addStarInfo();
+            InfoElement elem = new InfoElement();
+            elem.info = siteName;
+            elem.date = "";
+            elem.dUrl = dUrl;
+            fileTool.addStarInfo(elem);
 
             Toast.makeText(WebActivity_dview.this, "已加入收藏",Toast.LENGTH_SHORT).show();
         }

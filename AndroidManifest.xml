@@ -12,7 +12,9 @@
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".WebActivity_dview"></activity>
+        <activity android:name=".MyStarsActivity"></activity>
+        <activity android:name=".EditStarsActivity" />
+        <activity android:name=".WebActivity_dview" />
         <activity android:name=".AggSettingActivity" />
         <activity android:name=".EditSitesActivity" />
         <activity android:name=".AggActivity" />

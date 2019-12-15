@@ -116,6 +116,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //右侧菜单中“我的收藏”的点击事件
+        RelativeLayout myStarBt = (RelativeLayout)findViewById(R.id.main_myStars);
+        myStarBt.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //启动MyStarsActivity
+                Intent  intent=new Intent(MainActivity.this,MyStarsActivity.class);
+                startActivity(intent);
+            }
+        });
+
         //右侧菜单中“编辑网站”的点击事件
         RelativeLayout editSiteBt = (RelativeLayout)findViewById(R.id.main_editSites);
         editSiteBt.setOnClickListener(new View.OnClickListener(){
@@ -124,6 +134,16 @@ public class MainActivity extends AppCompatActivity {
                 //启动EditSitesActivity
                 Intent  intent=new Intent(MainActivity.this,EditSitesActivity.class);
                 startActivityForResult(intent,2);
+            }
+        });
+
+        //右侧菜单中“编辑收藏夹”的点击事件
+        RelativeLayout editStarsBt = (RelativeLayout)findViewById(R.id.main_editStars);
+        editStarsBt.setOnClickListener(new View.OnClickListener(){
+            public void onClick(View view){
+                //启动EditStarsActivity
+                Intent  intent=new Intent(MainActivity.this,EditStarsActivity.class);
+                startActivity(intent);
             }
         });
 

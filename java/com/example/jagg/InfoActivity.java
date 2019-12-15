@@ -131,6 +131,10 @@ class InfoElemAdapter extends ArrayAdapter<InfoElement> {
         info.setText(infoElem.info);
         date.setText(infoElem.date);
 
+        if(date.getText().equals("")){
+            date.setHeight(0);
+        }
+
         return view;
     }
 }
