@@ -101,7 +101,7 @@ class Site_baidu {
                     Document doc;
                     int codeLength = 0;
 
-                    int maxTryTimes = 20;
+                    int maxTryTimes = 50;
                     int tryTimes = 0;
                     do {
                         //获取源码

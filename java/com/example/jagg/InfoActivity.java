@@ -27,6 +27,7 @@ public class InfoActivity extends AppCompatActivity {
     private String siteUrl;
     private String keyWords;
     private int pageId;
+    int npages;
 
     private WebTool webTool = new WebTool();
 
@@ -79,13 +80,30 @@ public class InfoActivity extends AppCompatActivity {
         siteName = intent.getStringExtra("siteName");
         siteUrl = intent.getStringExtra("siteUrl");
         keyWords = intent.getStringExtra("keyWords");
+        npages = intent.getIntExtra("npages",1);
 
-        //加载对应的网站信息
-        loadInfos();
+        ArrayList<String> infoTitles = new ArrayList<String>();
+        ArrayList<String> infoDates = new ArrayList<String>();
+        ArrayList<String> infoUrls = new ArrayList<String>();
+        infoTitles = intent.getStringArrayListExtra("infoTitles");
+        infoDates = intent.getStringArrayListExtra("infoDates");
+        infoUrls = intent.getStringArrayListExtra("infoUrls");
+        for(int i=0;i<infoTitles.size();i++){
+            InfoElement elem = new InfoElement();
+            elem.info = infoTitles.get(i);
+            elem.date = infoDates.get(i);
+            elem.dUrl = infoUrls.get(i);
+            infoElems.add(elem);
+        }
+
+        //加载信息到界面
+        InfoElemAdapter adapter = new InfoElemAdapter(
+                InfoActivity.this, R.layout.info_element, infoElems);
+        listView.setAdapter(adapter);
 
         //初始化 显示“当前页id/总页数”的textView
         textView = (TextView)findViewById(R.id.infoPage_textView);
-        textView.setText((pageId+1) + "/" + webTool.npages);
+        textView.setText((pageId+1) + "/" + npages);
 
         //设置listView的点击事件
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -111,7 +129,7 @@ public class InfoActivity extends AppCompatActivity {
                     pageId = 0;
 
                 loadInfos();
-                textView.setText((pageId+1) + "/" + webTool.npages);
+                textView.setText((pageId+1) + "/" + npages);
             }
         });
 
@@ -121,11 +139,11 @@ public class InfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 pageId++;
-                if(pageId > webTool.npages-1)
-                    pageId = webTool.npages-1;
+                if(pageId > npages-1)
+                    pageId = npages-1;
 
                 loadInfos();
-                textView.setText((pageId+1) + "/" + webTool.npages);
+                textView.setText((pageId+1) + "/" + npages);
             }
         });
     }

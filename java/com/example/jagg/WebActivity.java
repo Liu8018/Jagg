@@ -30,6 +30,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import java.util.ArrayList;
+
 public class WebActivity extends AppCompatActivity {
 
     FileTool fileTool = new FileTool();
@@ -43,6 +45,52 @@ public class WebActivity extends AppCompatActivity {
 
     //网站名
     String siteName;
+
+    String keyWords;
+    int npages;
+
+    ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
+
+    private ProgressDialog processDialog;
+    private Handler handler =new Handler(){
+        @Override
+        //当有消息发送出来的时候就执行Handler的这个方法
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            //只要执行到这里就关闭对话框
+            processDialog.dismiss();
+
+            //检查是否加载成功
+            if(infoElems.size() == 1){
+                InfoElement elem = infoElems.get(0);
+                if(elem.info.equals("-1") && elem.date.equals("-1") && elem.dUrl.equals("-1")){
+                    Toast.makeText(WebActivity.this, "加载失败，请重试",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            ArrayList<String> infoTitles = new ArrayList<String>();
+            ArrayList<String> infoDates = new ArrayList<String>();
+            ArrayList<String> infoUrls = new ArrayList<String>();
+
+            for(InfoElement elem:infoElems){
+                infoTitles.add(elem.info);
+                infoDates.add(elem.date);
+                infoUrls.add(elem.dUrl);
+            }
+
+            //调用infoActivity
+            Intent intent = new Intent(WebActivity.this, InfoActivity.class);
+            intent.putExtra("siteName",siteName);
+            intent.putExtra("siteUrl",dUrl);
+            intent.putExtra("keyWords",keyWords);
+            intent.putExtra("npages",npages);
+            intent.putStringArrayListExtra("infoTitles",infoTitles);
+            intent.putStringArrayListExtra("infoDates",infoDates);
+            intent.putStringArrayListExtra("infoUrls",infoUrls);
+            startActivity(intent);
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,12 +210,21 @@ public class WebActivity extends AppCompatActivity {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     //Toast.makeText(WebActivity.this, dUrl+"\n"+et.getText().toString(), Toast.LENGTH_SHORT).show();
-                    //调用infoActivity
-                    Intent intent = new Intent(WebActivity.this, InfoActivity.class);
-                    intent.putExtra("siteName",siteName);
-                    intent.putExtra("siteUrl",dUrl);
-                    intent.putExtra("keyWords",et.getText().toString());
-                    startActivity(intent);
+
+                    //构建一个等待界面
+                    processDialog= ProgressDialog.show(WebActivity.this, "", "正在搜索…");
+                    new Thread(){
+                        public void run(){
+                            //在这里执行长耗时方法
+                            keyWords = et.getText().toString();
+                            WebTool webTool = new WebTool();
+                            infoElems = webTool.crawlInfoList(dUrl,keyWords,0);
+                            npages = webTool.npages;
+
+                            //执行完毕后给handler发送一个消息
+                            handler.sendEmptyMessage(0);
+                        }
+                    }.start();
                 }
             });
 

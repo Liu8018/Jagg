@@ -17,7 +17,6 @@ import android.widget.EditText;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
-import java.sql.Ref;
 import java.util.Calendar;
 
 public class AggSettingActivity extends AppCompatActivity {
