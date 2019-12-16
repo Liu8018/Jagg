@@ -3,10 +3,13 @@ package com.example.jagg;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.Handler;
+import android.os.Message;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -44,6 +47,19 @@ public class AggActivity extends AppCompatActivity {
 
     ArrayList<csElement> csElems = new ArrayList<csElement>();
     ArrayList<InfoElement> infoElems = new ArrayList<InfoElement>();
+
+    private ProgressDialog processDialog;
+    private Handler handler =new Handler(){
+        @Override
+        //当有消息发送出来的时候就执行Handler的这个方法
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            //只要执行到这里就关闭对话框
+            processDialog.dismiss();
+
+            loadAggInfos();
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -204,8 +220,19 @@ public class AggActivity extends AppCompatActivity {
             startActivityForResult(intent,1);
         }
         else if (item.getItemId() == R.id.agg_menu_refresh){
-            refreshAggInfos();
-            loadAggInfos();
+
+            //构建一个等待界面
+            processDialog= ProgressDialog.show(AggActivity.this, "", "正在刷新…");
+            new Thread(){
+                public void run(){
+                    //在这里执行长耗时方法
+                    refreshAggInfos();
+
+                    //执行完毕后给handler发送一个消息
+                    handler.sendEmptyMessage(0);
+                }
+            }.start();
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -218,8 +245,18 @@ public class AggActivity extends AppCompatActivity {
         if(resultCode==1 && requestCode==1){
             TextView textview = (TextView) findViewById(R.id.agg_keywordText);
             textview.setText("关键词：" + fileTool.readKeywords());
-            refreshAggInfos();
-            loadAggInfos();
+
+            //构建一个等待界面
+            processDialog= ProgressDialog.show(AggActivity.this, "", "正在刷新…");
+            new Thread(){
+                public void run(){
+                    //在这里执行长耗时方法
+                    refreshAggInfos();
+
+                    //执行完毕后给handler发送一个消息
+                    handler.sendEmptyMessage(0);
+                }
+            }.start();
         }
 
     }

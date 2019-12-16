@@ -23,6 +23,8 @@ public class MyStarsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_my_stars);
 
+        setTitle("我的收藏");
+
         infoElems = fileTool.readStarInfos_detail();
         InfoElemAdapter adapter = new InfoElemAdapter(
                 MyStarsActivity.this, R.layout.info_element, infoElems);

@@ -9,6 +9,7 @@ import android.os.Environment;
 import android.util.Log;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Toast;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -99,6 +100,9 @@ class Site_baidu {
                     Elements els;
                     Document doc;
                     int codeLength = 0;
+
+                    int maxTryTimes = 20;
+                    int tryTimes = 0;
                     do {
                         //获取源码
                         doc = Jsoup.connect(pageUrl)
@@ -110,8 +114,24 @@ class Site_baidu {
                         //Log.i("debug_code",doc.html());
                         //Log.i("debug_code length", String.valueOf(doc.html().length()));
                         codeLength = doc.html().length();
+                        if(codeLength > 8000){
+                            break;
+                        }
+
+                        tryTimes++;
+
+                    } while(tryTimes < maxTryTimes);
+
+                    //若没有搜索成功
+                    if(tryTimes == maxTryTimes){
+                        InfoElement elem = new InfoElement();
+                        elem.info = "-1";
+                        elem.date = "-1";
+                        elem.dUrl = "-1";
+                        infos.add(elem);
+                        return;
                     }
-                    while (codeLength < 8000);
+
                     //Log.i("debug element 结果数",String.valueOf(els.size()));
                     //Log.i("element內容 第一个", els.get(0).toString());
 

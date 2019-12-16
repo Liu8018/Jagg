@@ -2,9 +2,13 @@ package com.example.jagg;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.IDNA;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +17,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,12 +36,39 @@ public class InfoActivity extends AppCompatActivity {
 
     TextView textView;
 
+
+    private ProgressDialog processDialog;
+    private Handler handler =new Handler(){
+        @Override
+        //当有消息发送出来的时候就执行Handler的这个方法
+        public void handleMessage(Message msg){
+            super.handleMessage(msg);
+            //只要执行到这里就关闭对话框
+            processDialog.dismiss();
+
+            //检查是否加载成功
+            if(infoElems.size() == 1){
+                InfoElement elem = infoElems.get(0);
+                if(elem.info.equals("-1") && elem.date.equals("-1") && elem.dUrl.equals("-1")){
+                    Toast.makeText(InfoActivity.this, "加载失败，请重试",Toast.LENGTH_SHORT).show();
+                    return;
+                }
+            }
+
+            InfoElemAdapter adapter = new InfoElemAdapter(
+                    InfoActivity.this, R.layout.info_element, infoElems);
+            listView.setAdapter(adapter);
+        }
+    };
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //设置信息列表界面
         setContentView(R.layout.activity_info);
+
+        setTitle("搜索结果");
 
         //变量初始化
         pageId = 0;
@@ -100,11 +132,19 @@ public class InfoActivity extends AppCompatActivity {
 
     //加载对应的网站信息
     private void loadInfos() {
-        infoElems = webTool.crawlInfoList(siteUrl,keyWords,pageId);
 
-        InfoElemAdapter adapter = new InfoElemAdapter(
-                InfoActivity.this, R.layout.info_element, infoElems);
-        listView.setAdapter(adapter);
+        //构建一个等待界面
+        processDialog= ProgressDialog.show(InfoActivity.this, "", "正在加载…");
+        new Thread(){
+            public void run(){
+                //在这里执行长耗时方法
+                infoElems = webTool.crawlInfoList(siteUrl,keyWords,pageId);
+
+                //执行完毕后给handler发送一个消息
+                handler.sendEmptyMessage(0);
+            }
+        }.start();
+
     }
 }
 
