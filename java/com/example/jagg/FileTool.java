@@ -208,7 +208,6 @@ public class FileTool {
         return infoElems;
     }
 
-    /*
     //检查网页是否已经收藏
     boolean isStarred(String url){
         boolean isStar = false;
@@ -264,7 +263,7 @@ public class FileTool {
 
         writeStringToFile(starInfosXmlPath,newXml);
     }
-    */
+
 
     //读取收藏夹
     ArrayList<csElement> readStarInfos(){
@@ -324,10 +323,13 @@ public class FileTool {
     }
 
     //删除某一行的收藏
-    void removeStarInfo(int id){
+    void removeStarInfo(ArrayList ids){
         String xml = readFileToString(starInfosXmlPath);
         String[] lines = xml.split("\n");
-        lines[1+id] = "";
+        for(Object id:ids) {
+            //Log.i("debug_ index",(int)id+".");
+            lines[1 + (int)id] = "";
+        }
         String newXml = "";
         for(String line:lines){
             if(!line.equals(""))

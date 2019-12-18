@@ -5,6 +5,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -64,11 +65,15 @@ public class EditStarsActivity extends AppCompatActivity {
         }
         else if (item.getItemId() == R.id.edit_sites_menu_ok){
             int elemCount = csElems.size();
+            ArrayList removeIds = new ArrayList();
             for(int i=0;i<elemCount;i++){
                 if(!csElems.get(i).checked){
-                    fileTool.removeStarInfo(i);
+                    //Log.i("debug_ index",i+".");
+                    //fileTool.removeStarInfo(i);
+                    removeIds.add(i);
                 }
             }
+            fileTool.removeStarInfo(removeIds);
 
             finish();
         }

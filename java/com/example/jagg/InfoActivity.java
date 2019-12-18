@@ -28,6 +28,7 @@ public class InfoActivity extends AppCompatActivity {
     private String keyWords;
     private int pageId;
     int npages;
+    String pageDirect;
 
     private WebTool webTool = new WebTool();
 
@@ -52,6 +53,14 @@ public class InfoActivity extends AppCompatActivity {
                 InfoElement elem = infoElems.get(0);
                 if(elem.info.equals("-1") && elem.date.equals("-1") && elem.dUrl.equals("-1")){
                     Toast.makeText(InfoActivity.this, "加载失败，请重试",Toast.LENGTH_SHORT).show();
+
+                    if(pageDirect.equals("prev")){
+                        pageId++;
+                    }
+                    else {
+                        pageId--;
+                    }
+                    textView.setText((pageId+1) + "/" + npages);
                     return;
                 }
             }
@@ -124,6 +133,7 @@ public class InfoActivity extends AppCompatActivity {
         prevButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pageDirect = "prev";
                 pageId--;
                 if(pageId < 0)
                     pageId = 0;
@@ -138,6 +148,7 @@ public class InfoActivity extends AppCompatActivity {
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                pageDirect = "next";
                 pageId++;
                 if(pageId > npages-1)
                     pageId = npages-1;

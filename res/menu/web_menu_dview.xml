@@ -7,7 +7,7 @@
     <item
         android:id="@+id/web_menu_addStar"
         android:orderInCategory="1"
-        android:icon="@drawable/add_star"
+        android:icon="@drawable/star_unset"
         android:title="@string/app_name"
         app:showAsAction="ifRoom" />
 </menu>

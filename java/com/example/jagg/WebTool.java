@@ -184,6 +184,11 @@ class Site_baidu {
                     }
                 }
                 catch (IOException e) {
+                    InfoElement elem = new InfoElement();
+                    elem.info = "-1";
+                    elem.date = "-1";
+                    elem.dUrl = "-1";
+                    infos.add(elem);
                     Log.e("jsoup error","ioexception");
                 }
             }

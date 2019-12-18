@@ -3,10 +3,6 @@ package com.example.jagg;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.MenuItemCompat;
-
-import android.content.ClipData;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -15,17 +11,12 @@ import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.Window;
-import android.view.WindowManager;
 import android.webkit.JsResult;
-import android.webkit.ValueCallback;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
 public class WebActivity_dview extends AppCompatActivity {
 
@@ -40,6 +31,8 @@ public class WebActivity_dview extends AppCompatActivity {
 
     //网站名
     String siteName;
+
+    MenuItem starItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,11 +78,20 @@ public class WebActivity_dview extends AppCompatActivity {
         @Override
         public void onPageFinished(WebView view, String url) {//页面加载完成
             webProgressBar.setVisibility(view.GONE);
+
+            dUrl = url;
+
+            if(fileTool.isStarred(url)){
+                starItem.setIcon(R.drawable.star_set);
+            }
         }
 
         @Override
         public void onPageStarted(WebView view, String url, Bitmap favicon) {//页面开始加载
             webProgressBar.setVisibility(view.VISIBLE);
+
+            //Log.i("debug_ url start",url);
+            dUrl = url;
         }
 
     };
@@ -142,20 +144,35 @@ public class WebActivity_dview extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.web_menu_dview, menu);
 
+        starItem = menu.findItem(R.id.web_menu_addStar);
+
         return super.onCreateOptionsMenu(menu);
     }
+
+
 
     //menu按钮响应
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.web_menu_addStar) {
-            InfoElement elem = new InfoElement();
-            elem.info = siteName;
-            elem.date = "";
-            elem.dUrl = dUrl;
-            fileTool.addStarInfo(elem);
 
-            Toast.makeText(WebActivity_dview.this, "已加入收藏",Toast.LENGTH_SHORT).show();
+            if(!fileTool.isStarred(dUrl)) {
+                InfoElement elem = new InfoElement();
+                elem.info = siteName;
+                elem.date = "";
+                elem.dUrl = dUrl;
+                fileTool.addStarInfo(elem);
+
+                Toast.makeText(WebActivity_dview.this, "已加入收藏", Toast.LENGTH_SHORT).show();
+
+                item.setIcon(R.drawable.star_set);
+            } else{
+                fileTool.unStarInfo(dUrl);
+
+                Toast.makeText(WebActivity_dview.this, "已取消收藏", Toast.LENGTH_SHORT).show();
+
+                item.setIcon(R.drawable.star_unset);
+            }
         }
 
         return super.onOptionsItemSelected(item);
