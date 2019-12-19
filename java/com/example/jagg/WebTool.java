@@ -19,6 +19,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class WebTool {
     int npages;
@@ -84,11 +85,29 @@ class Site_baidu {
         siteUrl = siteUrl.replace("https://","");
         siteUrl = siteUrl.replace("http://","");
 
+        siteUrl = siteUrl.split("/")[0];
+        if(siteUrl.equals("i.ifeng.com")){
+            siteUrl = "ifeng.com";
+        }
+        else if(siteUrl.equals("m.xinhuanet.com")){
+            siteUrl = "xinhuanet.com";
+        }
+        else if(siteUrl.equals("www.huanqiu.com")){
+            siteUrl = "huanqiu.com";
+        }
+
         keyWords += " site:"+siteUrl;
 
-        final String pageUrl = "https://www.baidu.com/s?pn="+pageId*10+"&wd="+keyWords;
+        FileTool fileTool = new FileTool();
+        int timeLimitDays = Integer.valueOf(fileTool.readTimeLimit());
 
-        //Log.i("pageUrl", pageUrl);
+        String nowTime = Calendar.getInstance().getTimeInMillis()/1000+"";
+        String startTime = (Calendar.getInstance().getTimeInMillis()/1000-86400*timeLimitDays)+"";
+
+        final String pageUrl = "https://www.baidu.com/s?pn="+pageId*10+"&wd="+keyWords+"&rn=20"+"&gpc=stf%3D"+startTime+"%2C"+nowTime;
+
+        //Log.i("debug_ pageUrl", pageUrl);
+        //Log.i("debug_ time", Calendar.getInstance().getTimeInMillis()/1000+".");
 
         Thread th = new Thread() {
             @Override
@@ -121,6 +140,8 @@ class Site_baidu {
                         tryTimes++;
 
                     } while(tryTimes < maxTryTimes);
+
+                    //Log.i("debug_ try times",tryTimes+".");
 
                     //若没有搜索成功
                     if(tryTimes == maxTryTimes){

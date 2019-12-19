@@ -337,4 +337,30 @@ public class FileTool {
         }
         writeStringToFile(starInfosXmlPath,newXml);
     }
+
+    //写入时间限制
+    void writeTimeLimit(String timeLimit){
+        String xml = readFileToString(aggSettingsXmlPath);
+        String[] lines = xml.split("\n");
+        lines[3] = "<timeLimit>"+timeLimit+"</timeLimit>";
+        String newXml = "";
+        for(String line:lines){
+            newXml += line + "\n";
+        }
+        writeStringToFile(aggSettingsXmlPath,newXml);
+    }
+
+    //读取时间限制
+    String readTimeLimit(){
+        try {
+            File xml = new File(aggSettingsXmlPath);
+            Document doc = Jsoup.parse(xml, "UTF-8", "");
+            Elements timeLimit = doc.select("timeLimit");
+            return timeLimit.text();
+        }
+        catch (IOException e) {
+            Log.e("jsoup error","ioexception");
+            return "";
+        }
+    }
 }

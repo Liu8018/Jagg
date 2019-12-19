@@ -17,7 +17,6 @@
         android:id="@+id/infoElem_date_inagg"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="200dp"
         app:layout_constraintLeft_toLeftOf="@id/infoElem_info_inagg"
         app:layout_constraintTop_toBottomOf="@id/infoElem_info_inagg"
         app:layout_constraintBottom_toBottomOf="parent"

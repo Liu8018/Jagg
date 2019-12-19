@@ -35,6 +35,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AggActivity extends AppCompatActivity {
 
@@ -175,7 +176,19 @@ public class AggActivity extends AppCompatActivity {
             }
         }
 
+        infoElems = randomList(infoElems);
+
         fileTool.writeAggInfos(infoElems);
+    }
+
+    public static <V> ArrayList<V> randomList(ArrayList<V> sourceList){
+        ArrayList<V> randomList = new ArrayList<V>( sourceList.size( ) );
+        do{
+            int randomIndex = Math.abs( new Random( ).nextInt( sourceList.size() ) );
+            randomList.add( sourceList.remove( randomIndex ) );
+        }while( sourceList.size( ) > 0 );
+
+        return randomList;
     }
 
     //加载聚合信息
@@ -317,12 +330,12 @@ class InfoElemAdapter_inagg extends ArrayAdapter<InfoElement> {
         TextView info = (TextView) view.findViewById(R.id.infoElem_info_inagg);
         TextView date = (TextView) view.findViewById(R.id.infoElem_date_inagg);
 
+        info.setText(infoElem.info);
+        date.setText(infoElem.date);
+
         if(date.getText().equals("")){
             date.setHeight(0);
         }
-
-        info.setText(infoElem.info);
-        date.setText(infoElem.date);
 
         return view;
     }

@@ -124,7 +124,13 @@ public class WebActivity extends AppCompatActivity {
         siteName = intent.getStringExtra("siteName");
         actionBar.setTitle(siteName);
         //actionBar.setSubtitle("Sub Title");
-        webView.loadUrl(dUrl);
+        if(dUrl.contains("sina")){
+            webView.loadUrl("https://sina.cn/?vt=4&backToHome=news");
+        }else if(dUrl.contains("sohu")){
+            webView.loadUrl("http://m.sohu.com/?spm=smwp.ch8.hdn.1.157673830812642sOk8M");
+        }
+        else
+            webView.loadUrl(dUrl);
 
         webView.setWebChromeClient(webChromeClient);
         webView.setWebViewClient(webViewClient);
@@ -135,6 +141,7 @@ public class WebActivity extends AppCompatActivity {
     private WebViewClient webViewClient=new WebViewClient(){
         @Override
         public void onPageFinished(WebView view, String url) {//页面加载完成
+            //Log.i("debug_ site url",url);
             webProgressBar.setVisibility(view.GONE);
         }
 

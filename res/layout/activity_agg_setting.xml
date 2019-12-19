@@ -29,10 +29,45 @@
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/aggSetting_refreshTime"
+        android:id="@+id/aggSetting_timeLimit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/aggSetting_keywords">
+
+        <TextView
+            android:id="@+id/aggSetting_tv3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:text="时间限制:"/>
+        <EditText
+            android:id="@+id/aggSetting_et3"
+            android:layout_width="30dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:textAlignment="center"
+            android:layout_toRightOf="@id/aggSetting_tv3"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/aggSetting_et3"
+            android:layout_margin="10dp"
+            android:text="天"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/aggSetting_tv3"
+            android:layout_marginTop="10dp"
+            android:background="@color/colorPrimary"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/aggSetting_refreshTime"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/aggSetting_timeLimit">
 
         <TextView
             android:id="@+id/aggSetting_tv2"

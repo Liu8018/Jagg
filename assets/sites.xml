@@ -1,6 +1,10 @@
 <Doc>
-<site><name>北理工</name><url>http://www.bit.edu.cn</url></site>
-<site><name>CSDN</name><url>https://www.csdn.net</url></site>
-<site><name>开源中国</name><url>https://www.oschina.net</url></site>
-<site><name>简书</name><url>https://www.jianshu.com</url></site>
+<site><name>新浪新闻</name><url>https://news.sina.cn/?from=wap</url></site>
+<site><name>搜狐新闻</name><url>http://m.sohu.com/ch/8?pvid=000115_3w_c</url></site>
+<site><name>腾讯新闻</name><url>https://xw.qq.com/?f=c_news</url></site>
+<site><name>网易新闻</name><url>https://3g.163.com/touch/news/</url></site>
+<site><name>凤凰新闻</name><url>https://i.ifeng.com/?vt=5&mid=t0WEf</url></site>
+<site><name>人民网</name><url>http://m.people.cn/</url></site>
+<site><name>新华网</name><url>http://m.xinhuanet.com/</url></site>
+<site><name>环球网</name><url>https://www.huanqiu.com/</url></site>
 </Doc>

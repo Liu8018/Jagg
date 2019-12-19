@@ -40,6 +40,9 @@ public class AggSettingActivity extends AppCompatActivity {
         EditText et_kw = (EditText)findViewById(R.id.aggSetting_et1);
         et_kw.setText(fileTool.readKeywords());
 
+        EditText et_tl = (EditText)findViewById(R.id.aggSetting_et3);
+        et_tl.setText(fileTool.readTimeLimit());
+
         final TimePicker tp = (TimePicker)findViewById(R.id.aggSetting_tp);
         CheckBox cb = (CheckBox)findViewById(R.id.aggSetting_cb);
 
@@ -100,6 +103,13 @@ public class AggSettingActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
             }
 
+            EditText et_tl = (EditText)findViewById(R.id.aggSetting_et3);
+            String timeLimit = et_tl.getText().toString();
+            if(timeLimit.isEmpty()){
+                Toast.makeText(AggSettingActivity.this, "时间限制不能为空！",Toast.LENGTH_SHORT).show();
+                return super.onOptionsItemSelected(item);
+            }
+
             String refreshTime = hour+"-"+minute;
 
             CheckBox cb = (CheckBox)findViewById(R.id.aggSetting_cb);
@@ -120,8 +130,8 @@ public class AggSettingActivity extends AppCompatActivity {
                 alarmManager.setRepeating(AlarmManager.RTC, timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent);
             }
 
-            FileTool fileTool = new FileTool();
             fileTool.writeKeyword(keywords);
+            fileTool.writeTimeLimit(timeLimit);
             fileTool.writeRefreshTime(refreshTime);
 
             setResult(1);
