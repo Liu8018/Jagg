@@ -39,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
-            android:text="时间限制:"/>
+            android:text="信息时限:"/>
         <EditText
             android:id="@+id/aggSetting_et3"
             android:layout_width="30dp"
