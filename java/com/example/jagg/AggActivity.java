@@ -168,27 +168,27 @@ public class AggActivity extends AppCompatActivity {
         String keywords = fileTool.readKeywords();
 
         //遍历网站，找到checked的网站获取信息
+        ArrayList<ArrayList<InfoElement>> allSiteInfos = new ArrayList<>();
+        int maxSiteInfosLen=0;
         WebTool webTool = new WebTool();
         for(int i=0;i<csElems.size();i++){
-            if(csElems.get(i).checked) {
-                ArrayList<InfoElement> tmpInfoElems = webTool.crawlInfoList(siteUrls[i],keywords,0);
-                infoElems.addAll(tmpInfoElems);
+            ArrayList<InfoElement> tmpInfoElems = new ArrayList<>();
+            if(csElems.get(i).checked)
+                tmpInfoElems = webTool.crawlInfoList(siteUrls[i],keywords,0);
+            allSiteInfos.add(tmpInfoElems);
+
+            if(tmpInfoElems.size() > maxSiteInfosLen)
+                maxSiteInfosLen = tmpInfoElems.size();
+        }
+
+        for(int i=0;i<maxSiteInfosLen;i++){
+            for(int sId=0;sId<allSiteInfos.size();sId++){
+                if(allSiteInfos.get(sId).size() > i)
+                    infoElems.add(allSiteInfos.get(sId).get(i));
             }
         }
 
-        infoElems = randomList(infoElems);
-
         fileTool.writeAggInfos(infoElems);
-    }
-
-    public static <V> ArrayList<V> randomList(ArrayList<V> sourceList){
-        ArrayList<V> randomList = new ArrayList<V>( sourceList.size( ) );
-        do{
-            int randomIndex = Math.abs( new Random( ).nextInt( sourceList.size() ) );
-            randomList.add( sourceList.remove( randomIndex ) );
-        }while( sourceList.size( ) > 0 );
-
-        return randomList;
     }
 
     //加载聚合信息
