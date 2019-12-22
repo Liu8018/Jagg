@@ -37,6 +37,8 @@ public class AggSettingActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_agg_setting);
 
+        setTitle("信息推送设置");
+
         EditText et_kw = (EditText)findViewById(R.id.aggSetting_et1);
         et_kw.setText(fileTool.readKeywords());
 

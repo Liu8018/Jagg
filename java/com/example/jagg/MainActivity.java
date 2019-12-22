@@ -240,6 +240,7 @@ public class MainActivity extends AppCompatActivity {
         tv.setMaxLines(2);//限制最大行数
         tv.setMaxWidth((int)(8*pixels));//限制最大宽度
         tv.setText(siteName);
+        tv.setTextColor(Color.BLACK);
         tv.setContentDescription(siteUrl);
         RelativeLayout.LayoutParams textViewParams = new RelativeLayout.LayoutParams(
                 RelativeLayout.LayoutParams.WRAP_CONTENT,RelativeLayout.LayoutParams.WRAP_CONTENT);
