@@ -183,8 +183,12 @@ public class AggActivity extends AppCompatActivity {
 
         for(int i=0;i<maxSiteInfosLen;i++){
             for(int sId=0;sId<allSiteInfos.size();sId++){
-                if(allSiteInfos.get(sId).size() > i)
-                    infoElems.add(allSiteInfos.get(sId).get(i));
+                if(allSiteInfos.get(sId).size() > i) {
+                    InfoElement elem = allSiteInfos.get(sId).get(i);
+                    if(elem.info.equals("-1"))
+                        continue;
+                    infoElems.add(elem);
+                }
             }
         }
 

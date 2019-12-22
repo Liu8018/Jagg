@@ -99,6 +99,14 @@
             android:layout_marginHorizontal="5dp"
             android:layout_below="@id/t2"/>
 
+        <ImageView
+            android:layout_width="21dp"
+            android:layout_height="21dp"
+            android:src="@drawable/edit_sites"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="14dp"
+            android:layout_alignParentRight="true"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -120,6 +128,14 @@
             android:background="#CFCFCF"
             android:layout_marginHorizontal="5dp"
             android:layout_below="@id/t1"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/star"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 
@@ -143,6 +159,14 @@
             android:layout_marginHorizontal="5dp"
             android:layout_below="@id/t1_1"/>
 
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/edit_star"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"/>
+
     </RelativeLayout>
 
     <RelativeLayout
@@ -165,6 +189,14 @@
             android:background="#CFCFCF"
             android:layout_marginHorizontal="5dp"
             android:layout_below="@id/t3"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@drawable/agg_setting"
+            android:layout_centerInParent="true"
+            android:layout_marginRight="10dp"
+            android:layout_alignParentRight="true"/>
 
     </RelativeLayout>
 
