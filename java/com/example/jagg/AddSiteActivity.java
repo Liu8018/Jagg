@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,15 @@ public class AddSiteActivity extends AppCompatActivity {
                 }
 
                 //此处应该检查一下用户设定的网站能否正常访问
+                if (!Patterns.WEB_URL.matcher(siteUrl).matches()) {
+                    Toast.makeText(AddSiteActivity.this, "链接无效！",Toast.LENGTH_SHORT).show();
+                    return;
+                } else{
+                    if(!urlHasAcceptableScheme(siteUrl)){
+                        Toast.makeText(AddSiteActivity.this, "链接必须以http或https开头！",Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
 
                 Intent intent = getIntent();
                 intent.putExtra("siteName", siteName);
@@ -57,5 +67,24 @@ public class AddSiteActivity extends AppCompatActivity {
             }
         });
 
+    }
+
+    private static final String acceptableSchemes[] = {
+            "http:",
+            "https:",
+            "file:"
+    };
+
+    private static boolean urlHasAcceptableScheme(String url) {
+        if (url == null) {
+            return false;
+        }
+
+        for (int i = 0; i < acceptableSchemes.length; i++) {
+            if (url.startsWith(acceptableSchemes[i])) {
+                return true;
+            }
+        }
+        return false;
     }
 }

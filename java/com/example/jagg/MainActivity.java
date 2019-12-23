@@ -1,5 +1,6 @@
 package com.example.jagg;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private static String[] PERMISSIONS_STORAGE = {
             "android.permission.READ_EXTERNAL_STORAGE",
             "android.permission.WRITE_EXTERNAL_STORAGE" };
-    public static void verifyStoragePermissions(Activity activity) {
+    public void verifyStoragePermissions(Activity activity) {
         try {
             //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,
@@ -60,12 +61,29 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                init();
+            } else {
+                System.exit(0);
+            }
+        }
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         //存储权限
         verifyStoragePermissions(MainActivity.this);
 
+        //初始化
+        init();
+    }
+
+    void init(){
         //设置主界面
         setContentView(R.layout.activity_main);
 
